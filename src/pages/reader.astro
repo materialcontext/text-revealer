@@ -1,0 +1,21 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import ReaderView from '../components/ReaderView.jsx';
+---
+
+<MainLayout title="Text Reveal - Reader" hideNav={true} hideFooter={true}>
+  <div class="reader-wrapper">
+    <ReaderView client:load />
+  </div>
+</MainLayout>
+
+<script>
+  // redirect to home if no file is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    const currentFile = localStorage.getItem('text-reveal-current');
+    if (!currentFile) {
+      window.location.href = '/';
+    }
+  });
+</script>
+

@@ -1,11 +1,194 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import MainLayout from '../layouts/MainLayout.astro';
+import FileLoader from '../components/FileLoader';
+import FileHistory from '../components/FileHistory';
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<MainLayout title="Text Reveal - Home" hideNav={true}>
+  <div class="container home-container">
+    <section class="app-header">
+      <h1>Text Reveal</h1>
+      <div id="action-button-container">
+        <div class="button-loading">Loading...</div>
+      </div>
+    </section>
+
+    <section class="how-to-use">
+      <h2>How to Use</h2>
+      <div class="instruction-grid">
+        <div class="instruction-item">
+          <h3>1. Upload Content</h3>
+          <p>Upload a file or paste text using the right format. Content is saved locally in your browser.</p>
+        </div>
+        <div class="instruction-item">
+          <h3>2. Reveal Text</h3>
+          <p>Click blanks to reveal them. Use arrow keys: right reveals, left hides.</p>
+        </div>
+        <div class="instruction-item">
+          <h3>3. Navigate</h3>
+          <p>Use up/down arrows or buttons to move between pages. Click revealed text to hide it again.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="text-format">
+      <h2>Text Format Guide</h2>
+      <div class="format-box">
+        <p>Use this format:</p>
+        <pre>
+title,
+
+this is a text with blanks like __ and __
+[answer1, answer2]
+
+PAGE
+
+next page title,
+another paragraph with __
+[answer]
+        </pre>
+        <ul class="format-rules">
+          <li>Start each section with a title followed by a comma</li>
+          <li>Use <code>__</code> for blanks</li>
+          <li>Put answers in <code>[]</code> after the paragraph</li>
+          <li>Separate pages with "PAGE" (or two newlines)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="file-loader-section">
+      <FileLoader client:load />
+    </section>
+
+    <section class="file-history-section">
+      <FileHistory client:load />
+    </section>
+  </div>
+</MainLayout>
+
+<script type="module">
+  document.addEventListener('DOMContentLoaded', () => {
+    const buttonContainer = document.getElementById('action-button-container');
+    const history = JSON.parse(localStorage.getItem('text-reveal-history') || '[]');
+    const files = JSON.parse(localStorage.getItem('text-reveal-files') || '{}');
+
+    const firstValidFile = history.find(id => files[id] && !files[id].name.includes("Demo"));
+
+    if (firstValidFile) {
+      const btn = document.createElement('button');
+      btn.textContent = "Continue";
+      btn.className = "continue-button";
+      btn.onclick = () => {
+        localStorage.setItem('text-reveal-current', firstValidFile);
+        window.location.href = '/reader';
+      };
+      buttonContainer.replaceChildren(btn);
+    } else {
+      const btn = document.createElement('button');
+      btn.textContent = "Start Demo";
+      btn.className = "demo-button";
+      btn.onclick = loadDemo;
+      buttonContainer.replaceChildren(btn);
+    }
+  });
+
+  function loadDemo() {
+    const demoContent = `Introduction to Poetry,
+
+Poetry is a form of __ that uses aesthetic and rhythmic qualities of language to evoke meanings.
+[literature]
+
+It often employs devices such as __ and imagery to convey ideas and emotions.
+[metaphor]
+
+A __ is a repeating unit in poetry that creates rhythm and structure.
+[meter]
+
+Poetry can be divided into many forms, such as __, sonnets, and free verse.
+[haiku]
+
+PAGE
+
+Elements of Poetry,
+
+The __ is the attitude or feeling that the writer expresses toward the subject.
+[tone]
+
+__ is the use of words that imitate sounds, such as "buzz" or "hiss".
+[onomatopoeia]
+
+A __ compares two unlike things using "like" or "as".
+[simile]
+
+Images that appeal to the senses create __, which helps readers visualize the poem.
+[imagery]
+
+PAGE
+
+Famous Poets,
+
+William __ is known as "the Bard" and wrote many famous plays and sonnets.
+[Shakespeare]
+
+Emily __ wrote nearly 1,800 poems, with themes of death and immortality.
+[Dickinson]
+
+Robert __ is famous for poems like "The Road Not Taken" and "Stopping by Woods on a Snowy Evening".
+[Frost]
+
+Maya __ was a poet and civil rights activist known for "I Know Why the Caged Bird Sings".
+[Angelou]`;
+
+    const pages = demoContent.split(/\n\s*PAGE\s*\n|\n\n\n/).map(p => p.trim()).filter(Boolean);
+
+    const parsed = pages.map(page => {
+      const lines = page.split('\n').filter(Boolean);
+      const title = lines.shift().replace(',', '').trim();
+      const sections = [];
+
+      let text = '';
+      for (const line of lines) {
+        if (line.startsWith('[')) {
+          const blanks = line.slice(1, -1).split(',').map(x => x.trim());
+          sections.push({ text: text.trim(), blanks });
+          text = '';
+        } else {
+          text += line + ' ';
+        }
+      }
+      return { title, sections };
+    });
+
+    const processed = parsed.map(page => ({
+      ...page,
+      sections: page.sections.map((section, idx) => {
+        let i = 0;
+        const processedText = section.text.replace(/__/g, () =>
+          `<span class="blank" data-index="${i++}">__</span>`
+        );
+        return { ...section, processedText };
+      })
+    }));
+
+    const file = {
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+      name: "Poetry Introduction (Demo)",
+      content: processed,
+      rawContent: demoContent,
+      timestamp: Date.now()
+    };
+
+    const files = JSON.parse(localStorage.getItem('text-reveal-files') || '{}');
+    files[file.id] = file;
+    localStorage.setItem('text-reveal-files', JSON.stringify(files));
+
+    const history = JSON.parse(localStorage.getItem('text-reveal-history') || '[]').filter(id => id !== file.id);
+    history.unshift(file.id);
+    if (history.length > 10) history.length = 10;
+    localStorage.setItem('text-reveal-history', JSON.stringify(history));
+
+    localStorage.setItem('text-reveal-current', file.id);
+    window.location.href = '/reader';
+  }
+</script>
+
