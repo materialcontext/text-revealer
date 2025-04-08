@@ -19,21 +19,6 @@ export const formatDate = (timestamp) => {
 };
 
 /**
- * Create a simple hash for a string
- * @param {string} str - String to hash
- * @returns {string} Simple hash
- */
-export const simpleHash = (str) => {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  return hash.toString(36).replace('-', '0');
-};
-
-/**
  * Truncate text if it's too long
  * @param {string} text - Text to truncate
  * @param {number} maxLength - Maximum length
@@ -76,7 +61,7 @@ export const countContent = (pages) => {
  * @param {string} filename - Filename to check
  * @returns {string} File extension
  */
-export const getFileExtension = (filename) => {
+const getFileExtension = (filename) => {
   return filename.split('.').pop().toLowerCase();
 };
 
@@ -114,27 +99,4 @@ export const createKeyboardHandler = (onLeft, onRight, onPrev, onNext) => {
         break;
     }
   };
-};
-
-/**
- * Create a file download
- * @param {string} content - Content to download
- * @param {string} filename - Filename
- * @param {string} type - MIME type
- */
-export const downloadFile = (content, filename, type = 'text/plain') => {
-  const blob = new Blob([content], { type });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-
-  // Cleanup
-  setTimeout(() => {
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, 0);
 };

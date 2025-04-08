@@ -13,6 +13,7 @@ export const parseText = (text) => {
         return [];
     }
 
+    // Split into pages
     const pages = text
         .split(/\n\s*PAGE\s*\n|\n\n\n/)
         .map(page => page.trim())
@@ -20,51 +21,54 @@ export const parseText = (text) => {
 
     return pages.map(pageContent => {
         const lines = pageContent.split('\n').filter(Boolean);
-        const title = lines[0].replace(',', '').trim();
 
-        const textSections = [];
-        let currentText = '';
-        let currentBlanks = [];
+        // Get title from first line
+        const title = lines.length > 0 ? lines[0].replace(',', '').trim() : 'Untitled';
+
+        // Process remaining lines
+        const sections = [];
+        let currentSection = null;
 
         for (let i = 1; i < lines.length; i++) {
-            const line = lines[i];
+            const line = lines[i].trim();
 
-            if (line.startsWith('[') && line.endsWith(']')) { // this line contains the text to reveal
-                const blanksContent = line.slice(1, -1);
-                currentBlanks = blanksContent.split(',').map(b => b.trim());
+            // Check if this is an answer line
+            if (line.startsWith('[') && line.endsWith(']')) {
+                // This line contains answers for a previous section
+                if (currentSection) {
+                    // Extract blanks from brackets
+                    const blanksContent = line.slice(1, -1);
+                    currentSection.blanks = blanksContent.split(',').map(b => b.trim());
 
-                if (currentText) { // previous line was text so push it to the array with these blank fills
-                    textSections.push({
-                        text: currentText.trim(),
-                        blanks: currentBlanks
-                    });
-                    // and reset
-                    currentText = '';
-                    currentBlanks = [];
-                } else { // previous line was not text but we've got blanks? ERR
-                    title = "ERROR";
-                    textSections = [{ text: "Incorrect text format detected.", blanks: [] }];
-                    return { title, sections: textSections }
+                    // Add the completed section
+                    sections.push(currentSection);
+                    currentSection = null;
                 }
-            } else { // not an array of blanks so this is PRESUMED to be a regular text line
-                if (currentText) {
-                    // previous was also PRESUMED to be a text and is PRESUMED to have NO BLANKS, so push it with an empty arr
-                    textSections.push({
-                        text: currentText.trim(),
-                        blanks: currentBlanks
-                    });
-                    // and reset
-                    currentText = line;
-                    currentBlanks = [];
-                } else { // set this text to process with the next input line
-                    currentText += line;
+            } else {
+                // This is a regular text line
+                // If we already have a pending section, add this to it
+                if (currentSection) {
+                    // Finish the previous section first (with no blanks)
+                    sections.push(currentSection);
+                    currentSection = null;
                 }
+
+                // Start a new section with this line
+                currentSection = {
+                    text: line,
+                    blanks: []
+                };
             }
+        }
+
+        // Add any remaining section
+        if (currentSection) {
+            sections.push(currentSection);
         }
 
         return {
             title,
-            sections: textSections
+            sections
         };
     });
 };
@@ -165,4 +169,3 @@ if (typeof window !== 'undefined') {
     window.parseJson = parseJson;
     window.prepareForReader = prepareForReader;
 }
-

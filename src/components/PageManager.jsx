@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import RevealableSection from './RevealableSection';
+import ControlBar from './ControlBar';
+import AudioUploader from './AudioUploader';
 import { parseText, parseJson, prepareForReader } from '../lib/parser';
+import { getAudioForPage, hasAudioForAllPages, saveMultipleAudioFiles } from '../lib/storage';
 
 const normalizeToPages = (input) => {
     if (Array.isArray(input)) {
@@ -13,8 +16,7 @@ const normalizeToPages = (input) => {
             const receivedText = Array.isArray(maybeJson) ? maybeJson : parseJson(input);
             return receivedText;
         } catch {
-            const receivedText = parseText(input)
-            console.log(receivedText)
+            const receivedText = parseText(input);
             return receivedText; // Plain text fallback
         }
     }
@@ -25,9 +27,13 @@ const normalizeToPages = (input) => {
 
 const PageManager = ({ file: fileProp }) => {
     const [file, setFile] = useState(fileProp || null);
+    const [fileId, setFileId] = useState(null);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
     // Track a single array of revealed blanks for the entire page
     const [pageRevealStates, setPageRevealStates] = useState({});
+    const [audioSrc, setAudioSrc] = useState(null);
+    const [showAudioUploader, setShowAudioUploader] = useState(false);
+    const [hasCheckedAudio, setHasCheckedAudio] = useState(false);
 
     // Load from localStorage on mount if no file prop was passed
     useEffect(() => {
@@ -40,11 +46,40 @@ const PageManager = ({ file: fileProp }) => {
 
             const files = JSON.parse(filesJSON);
             const loadedFile = files[currentId];
-            if (loadedFile) setFile(loadedFile);
+            if (loadedFile) {
+                setFile(loadedFile);
+                setFileId(currentId);
+            }
         } catch (err) {
             console.error('Error loading file from localStorage:', err);
         }
     }, [fileProp]);
+
+    // Load audio for current page when page changes
+    useEffect(() => {
+        if (fileId) {
+            const audio = getAudioForPage(fileId, currentPageIndex);
+            setAudioSrc(audio);
+        }
+    }, [fileId, currentPageIndex]);
+
+    // Check if we should offer bulk audio upload
+    useEffect(() => {
+        if (fileId && file && !hasCheckedAudio) {
+            const rawPages = normalizeToPages(file.content);
+            const pages = prepareForReader(rawPages);
+
+            const hasAllAudio = hasAudioForAllPages(fileId, pages.length);
+
+            // Only show the uploader if we don't have audio for all pages
+            // and we haven't checked yet (to avoid showing on every render)
+            if (!hasAllAudio) {
+                setShowAudioUploader(true);
+            }
+
+            setHasCheckedAudio(true);
+        }
+    }, [fileId, file, hasCheckedAudio]);
 
     // Handler for blank clicks - working across sections
     const handleBlankClick = (sectionIndex, blankIndex, pages) => {
@@ -127,6 +162,36 @@ const PageManager = ({ file: fileProp }) => {
         return sectionIndices;
     };
 
+    const handlePrevPage = () => {
+        if (currentPageIndex > 0) {
+            setCurrentPageIndex(currentPageIndex - 1);
+        }
+    };
+
+    const handleNextPage = () => {
+        if (file && file.content) {
+            const rawPages = normalizeToPages(file.content);
+            const pages = prepareForReader(rawPages);
+
+            if (currentPageIndex < pages.length - 1) {
+                setCurrentPageIndex(currentPageIndex + 1);
+            }
+        }
+    };
+
+    const handleExit = () => {
+        window.location.href = '/';
+    };
+
+    const handleAudioUploadSuccess = () => {
+        setShowAudioUploader(false);
+        // Refresh audio for current page
+        if (fileId) {
+            const audio = getAudioForPage(fileId, currentPageIndex);
+            setAudioSrc(audio);
+        }
+    };
+
     if (!file?.content) {
         return <div className="container">No file loaded.</div>;
     }
@@ -138,6 +203,22 @@ const PageManager = ({ file: fileProp }) => {
     return (
         <div className="container">
             <div className="reader-wrapper">
+                {showAudioUploader && (
+                    <div className="audio-uploader-container">
+                        <AudioUploader
+                            fileId={fileId}
+                            pageCount={pages.length}
+                            onSuccess={handleAudioUploadSuccess}
+                        />
+                        <button
+                            className="dismiss-button"
+                            onClick={() => setShowAudioUploader(false)}
+                        >
+                            Dismiss
+                        </button>
+                    </div>
+                )}
+
                 <div className="reader-container">
                     <h2>{currentPage.title}</h2>
 
@@ -152,42 +233,19 @@ const PageManager = ({ file: fileProp }) => {
                         ))}
                     </div>
 
-                    <div className="navigation-controls">
-                        <div className="page-nav">
-                            <button
-                                onClick={() => setCurrentPageIndex(i => Math.max(i - 1, 0))}
-                                disabled={currentPageIndex === 0}
-                                className="nav-button prev"
-                            >
-                                Previous
-                            </button>
-
-                            <span className="page-indicator">
-                                Page {currentPageIndex + 1} of {pages.length}
-                            </span>
-
-                            <button
-                                onClick={() => setCurrentPageIndex(i => Math.min(i + 1, pages.length - 1))}
-                                disabled={currentPageIndex === pages.length - 1}
-                                className="nav-button next"
-                            >
-                                Next
-                            </button>
-                        </div>
-
-                        <div className="secondary-controls">
-                            <button
-                                className="exit-button"
-                                onClick={() => window.location.href = '/'}
-                            >
-                                Exit
-                            </button>
-                        </div>
-                    </div>
+                    <ControlBar
+                        fileId={fileId}
+                        currentPage={currentPageIndex}
+                        totalPages={pages.length}
+                        onPrevPage={handlePrevPage}
+                        onNextPage={handleNextPage}
+                        onExit={handleExit}
+                        audioSrc={audioSrc}
+                    />
                 </div>
             </div>
         </div>
     );
-};
+}
 
 export default PageManager;

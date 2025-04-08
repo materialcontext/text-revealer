@@ -1,7 +1,7 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 import FileLoader from '../components/FileLoader';
-import FileHistory from '../components/FileHistory';
+import CompactFileHistory from '../components/FileHistory';
 ---
 
 <MainLayout title="Text Reveal - Home" hideNav={true}>
@@ -31,15 +31,18 @@ import FileHistory from '../components/FileHistory';
       </div>
     </section>
 
-    <section class="file-history-section">
-      <FileHistory client:load />
-    </section>
-
     <section class="file-loader-section">
-      <FileLoader client:load />
+      <div class="file-loader-with-history">
+        <div class="file-loader-container">
+          <FileLoader client:load />
+        </div>
+        <div class="file-history-container">
+          <CompactFileHistory client:load />
+        </div>
+      </div>
     </section>
 
-        <section class="text-format">
+    <section class="text-format">
       <h2>Text Format Guide</h2>
       <div class="format-box">
         <p>Use this format:</p>
@@ -93,6 +96,7 @@ another paragraph with __
   });
 
   function loadDemo() {
+    // Demo content loading code remains the same
     const demoContent = `Introduction to Poetry,
 
 Poetry is a form of __ that uses aesthetic and rhythmic qualities of language to evoke meanings.
@@ -191,4 +195,3 @@ Maya __ was a poet and civil rights activist known for "I Know Why the Caged Bir
     window.location.href = '/reader';
   }
 </script>
-

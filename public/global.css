@@ -1,6 +1,14 @@
-/* Global CSS for Text Reveal App */
+/*
+ * Reorganized Global CSS for Text Reveal App
+ * - Grouped by component/purpose
+ * - Base styles first, then modifiers
+ * - Responsive design using mobile-first approach
+ * - Reduced redundancy through cascading
+ */
 
-/* Reset and base styles */
+/* ====================================
+   1. VARIABLES & RESET
+   ==================================== */
 :root {
     --primary-color: #2c5282;
     --primary-dark: #1a365d;
@@ -28,8 +36,7 @@
     padding: 0;
 }
 
-html,
-body {
+html, body {
     font-family: var(--font-family);
     font-size: var(--font-size);
     line-height: 1.5;
@@ -47,6 +54,9 @@ main {
     flex: 1;
 }
 
+/* ====================================
+   2. COMMON ELEMENTS
+   ==================================== */
 a {
     color: var(--primary-color);
     text-decoration: none;
@@ -58,12 +68,7 @@ a:hover {
     text-decoration: underline;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0.5em;
     line-height: 1.2;
 }
@@ -93,8 +98,7 @@ button:disabled {
     cursor: not-allowed;
 }
 
-input,
-textarea {
+input, textarea {
     font-family: inherit;
     font-size: 1rem;
     padding: 0.5rem;
@@ -104,14 +108,30 @@ textarea {
     transition: var(--transition);
 }
 
-input:focus,
-textarea:focus {
+input:focus, textarea:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 2px var(--primary-light);
 }
 
-/* Layout */
+/* Message states */
+.error-message {
+    background-color: #ffeeee;
+    color: var(--error-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+}
+
+.success-message {
+    background-color: #eeffee;
+    color: var(--success-color);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+}
+
+/* Layout containers */
 .container {
     width: 100%;
     max-width: 1200px;
@@ -119,7 +139,9 @@ textarea:focus {
     padding: 1rem;
 }
 
-/* Navigation */
+/* ====================================
+   3. HEADER, NAVIGATION & FOOTER
+   ==================================== */
 .main-nav {
     background-color: var(--primary-color);
     color: white;
@@ -156,20 +178,6 @@ textarea:focus {
     text-decoration: underline;
 }
 
-/* Footer */
-footer {
-    background-color: var(--light-gray);
-    padding: 1rem 0;
-    text-align: center;
-    margin-top: 2rem;
-}
-
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-}
-
 /* App Header */
 .app-header {
     display: flex;
@@ -186,19 +194,37 @@ footer {
     margin: 0;
 }
 
-.demo-button,
-.continue-button {
+/* Footer */
+footer, .subtle-footer {
+    background-color: var(--light-gray);
+    padding: 1rem 0;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.subtle-footer {
+    border-top: 1px solid var(--medium-gray);
+    font-size: 0.85rem;
+    color: var(--light-text);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ====================================
+   4. HOME PAGE COMPONENTS
+   ==================================== */
+/* Action buttons */
+.demo-button, .continue-button {
     background-color: var(--primary-color);
     color: white;
     padding: 0.6rem 1.2rem;
     font-size: 1rem;
     font-weight: 500;
     border-radius: var(--border-radius);
-}
-
-.demo-button:hover,
-.continue-button:hover {
-    background-color: var(--primary-dark);
 }
 
 .continue-button {
@@ -214,7 +240,7 @@ footer {
     font-size: 0.9rem;
 }
 
-/* How to Use Section */
+/* How to use section */
 .how-to-use {
     margin-bottom: 2.5rem;
 }
@@ -250,6 +276,7 @@ footer {
     margin: 0;
 }
 
+/* Format box */
 .text-format h2 {
     margin-bottom: 1.5rem;
     color: var(--text-color);
@@ -286,19 +313,70 @@ footer {
     font-size: 0.95rem;
 }
 
-/* File Loader */
-.file-loader {
+/* ====================================
+   5. FILE LOADER & HISTORY
+   ==================================== */
+/* Common card styling */
+.card {
     background-color: white;
-    padding: 2rem;
     border-radius: var(--border-radius);
+    border: 1px solid var(--medium-gray);
     box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.card-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--medium-gray);
+}
+
+.card-header h2, .card-header h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+.card-body {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* File loader layout - integrated with history */
+.file-loader-with-history {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: start;
     margin-bottom: 2rem;
+}
+
+/* File loader */
+.file-loader {
+    padding: 1.5rem 1.5rem 1.5rem 0;
+}
+
+.file-loader h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--medium-gray);
+}
+
+.file-loader form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .drop-area {
     border: 1px dashed var(--dark-gray);
     border-radius: var(--border-radius);
-    padding: 2rem;
+    padding: 1.5rem;
     text-align: center;
     margin-bottom: 1rem;
     cursor: pointer;
@@ -322,8 +400,7 @@ footer {
     position: relative;
 }
 
-.or-divider::before,
-.or-divider::after {
+.or-divider::before, .or-divider::after {
     content: "";
     position: absolute;
     top: 50%;
@@ -341,7 +418,7 @@ footer {
 }
 
 textarea {
-    min-height: 200px;
+    min-height: 150px;
     margin-bottom: 1rem;
 }
 
@@ -370,93 +447,101 @@ textarea {
     font-size: 1.1rem;
 }
 
-.error-message {
-    background-color: #ffeeee;
-    color: var(--error-color);
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius);
-    margin-bottom: 1rem;
-}
-
-.success-message {
-    background-color: #eeffee;
-    color: var(--success-color);
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius);
-    margin-bottom: 1rem;
-}
-
-/* File History */
-.file-history {
-    background-color: white;
-    padding: 2rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    margin-bottom: 2rem;
-}
-
-.file-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-}
-
-.file-item {
-    border: 1px solid var(--medium-gray);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    transition: var(--transition);
-    cursor: pointer;
-}
-
-.file-item:hover {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px var(--primary-light);
-}
-
-.file-preview {
+/* Compact file history */
+.compact-file-history {
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.compact-file-history h2 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--medium-gray);
+}
+
+.compact-file-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.compact-file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem;
+    border-bottom: 1px solid var(--medium-gray);
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: var(--border-radius);
+    margin-bottom: 0.25rem;
+}
+
+.compact-file-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.compact-file-item:hover {
+    background-color: var(--primary-light);
+}
+
+.file-info {
+    flex: 1;
+    min-width: 0; /* Allow text truncation */
+}
+
+.file-name {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.2rem;
 }
 
 .file-meta {
     display: flex;
-    gap: 1rem;
-    font-size: 0.875rem;
+    gap: 0.75rem;
+    font-size: 0.75rem;
     color: var(--light-text);
-    margin-bottom: 1rem;
 }
 
-.preview-text {
-    color: var(--light-text);
-    font-size: 0.875rem;
-    height: 4.5em;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-}
-
-.file-actions {
+.compact-actions {
     display: flex;
-    background-color: var(--light-gray);
-    padding: 0.75rem;
+    gap: 0.5rem;
 }
 
-.file-actions button {
-    flex: 1;
-    margin: 0 0.25rem;
+.compact-actions button {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+    min-width: auto;
 }
 
-.file-actions .delete-button {
+.compact-actions .delete-button {
     background-color: var(--error-color);
+    font-size: 1rem;
+    padding: 0 0.4rem;
 }
 
-.file-actions .delete-button:hover {
-    background-color: #b02a37;
+.compact-actions .delete-button:hover {
+    background-color: #c53030;
 }
 
-/* Reader */
+/* Compact mode for file loader */
+.file-loader-compact .drop-area {
+    padding: 1rem;
+}
+
+.file-loader-compact textarea {
+    min-height: 100px;
+}
+
+/* ====================================
+   6. READER COMPONENTS
+   ==================================== */
+/* Reader layout */
 .reader-wrapper {
     margin: 2rem 0;
     background-color: var(--background-color);
@@ -470,9 +555,10 @@ textarea {
     margin-bottom: 2rem;
 }
 
+/* Reader content styling */
 .reader-content {
     font-size: 1.15rem;
-    line-height: 1.6;
+    line-height: 1.85;
 }
 
 .page-title {
@@ -483,19 +569,12 @@ textarea {
     text-align: center;
 }
 
-.text-reveal-section {
-    margin-bottom: 1.5rem;
-}
-
-.text-reveal-section:last-child {
-    margin-bottom: 0;
-}
-
 .text-content {
+    margin-bottom: 0;
     transition: var(--transition);
 }
 
-/* Blanks */
+/* Blanks styling */
 .blank {
     display: inline-block;
     background-color: var(--blank-color);
@@ -520,13 +599,7 @@ textarea {
     border: 1px solid var(--primary-dark);
 }
 
-/* Navigation */
-.reader-navigation {
-    padding: 0.75rem 1rem;
-    border-top: 1px solid var(--medium-gray);
-    background-color: white;
-}
-
+/* Reader navigation */
 .navigation-controls {
     display: flex;
     flex-direction: column;
@@ -536,18 +609,18 @@ textarea {
     margin-top: 1.5rem;
 }
 
-.nav-button {
-    min-width: 100px;
-}
-
-.nav-button.hidden {
-    visibility: hidden;
-}
-
 .page-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.nav-button {
+    min-width: 80px;
+}
+
+.nav-button.hidden, .nav-button:disabled {
+    visibility: hidden;
 }
 
 .page-indicator {
@@ -570,7 +643,120 @@ textarea {
     background-color: var(--text-color);
 }
 
-/* File Browser */
+/* Focus styles for keyboard navigation */
+.reader-container:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 4px;
+}
+
+/* Keyboard help */
+.keyboard-help {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    background-color: var(--dark-gray);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-size: 0.8rem;
+    opacity: 0.8;
+    z-index: 100;
+    transition: opacity 0.3s ease;
+}
+
+.keyboard-help:hover {
+    opacity: 1;
+}
+
+.keyboard-help-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.5rem 1rem;
+}
+
+.key {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    margin-right: 0.3rem;
+}
+
+.keyboard-help.visible {
+    display: block;
+}
+
+.keyboard-help.hidden {
+    display: none;
+}
+
+.keyboard-toggle {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    background-color: var(--secondary-color);
+    color: white;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    opacity: 0.6;
+    z-index: 101;
+    transition: opacity 0.3s ease;
+}
+
+.keyboard-toggle:hover {
+    opacity: 1;
+}
+
+/* Loading states */
+.reader-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid var(--light-gray);
+    border-bottom-color: var(--primary-color);
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes rotation {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error states */
+.reader-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    padding: 1rem;
+}
+
+.reader-error h2 {
+    color: var(--error-color);
+    margin-bottom: 1rem;
+}
+
+/* ====================================
+   7. BROWSE PAGE COMPONENTS
+   ==================================== */
 .browse-container {
     padding-top: 2rem;
 }
@@ -653,62 +839,19 @@ textarea {
     background-color: #353e4a;
 }
 
-/* Loading indicator */
-.reader-loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-}
-
-.loader {
-    width: 48px;
-    height: 48px;
-    border: 5px solid var(--light-gray);
-    border-bottom-color: var(--primary-color);
-    border-radius: 50%;
-    display: inline-block;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
-    margin-bottom: 1rem;
-}
-
-@keyframes rotation {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
+/* ====================================
+   8. MEDIA QUERIES
+   ==================================== */
+/* Large screens - side by side layout for loader & history */
+@media (min-width: 992px) {
+    .file-loader-with-history {
+        grid-template-columns: 3fr 2fr;
     }
 }
 
-/* Error states */
-.reader-error {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    text-align: center;
-    padding: 1rem;
-}
-
-.reader-error h2 {
-    color: var(--error-color);
-    margin-bottom: 1rem;
-}
-
-.reader-error button {
-    margin-top: 1rem;
-}
-
-/* Responsive adjustments */
+/* Tablet screens */
 @media (max-width: 768px) {
-
-    .file-list,
-    .file-grid {
+    .file-list, .file-grid {
         grid-template-columns: 1fr;
     }
 
@@ -721,43 +864,45 @@ textarea {
         font-size: 1.25rem;
     }
 
-    .nav-button {
-        min-width: 100px;
+    .compact-file-item {
+        padding: 0.5rem;
     }
 
+    .file-meta {
+        flex-direction: column;
+        gap: 0;
+    }
+}
+
+/* Small screens - adjust for zoomed view */
+@media (min-resolution: 150dpi) {
     .reader-container {
-        padding: 1.5rem;
+        padding: 0.75rem 1rem;
     }
 
-    .reader-content {
-        font-size: 1rem;
+    .page-title {
+        margin-bottom: 0.75rem;
+    }
+
+    .text-reveal-section {
+        margin-bottom: 0.75rem;
+    }
+
+    .navigation-controls {
+        padding-top: 0.75rem;
+        margin-top: 0.75rem;
+        gap: 0.5rem;
     }
 }
 
-/* Subtle Footer */
-.subtle-footer {
-    border-top: 1px solid var(--medium-gray);
-    padding: 1rem 0;
-    text-align: center;
-    margin-top: 2rem;
-    font-size: 0.85rem;
-    color: var(--light-text);
-}
-
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-}
-
+/* Very small screens */
 @media (max-width: 480px) {
     .nav-container {
         flex-direction: column;
         gap: 1rem;
     }
 
-    .file-loader,
-    .file-history {
+    .file-loader, .compact-file-history {
         padding: 1rem;
     }
 
@@ -769,16 +914,8 @@ textarea {
         padding: 1rem;
     }
 
-    .reader-header {
-        padding: 0.75rem;
-    }
-
-    .reader-navigation {
-        padding: 0.75rem;
-    }
-
     .navigation-controls {
-        gap: 0.8rem;
+        padding: 0.75rem;
     }
 
     .page-nav {
@@ -792,5 +929,66 @@ textarea {
 
     .page-indicator {
         order: -1;
+    }
+}
+
+/* Fixed mini-nav for heavily zoomed view */
+@media (min-resolution: 150dpi) {
+    .navigation-controls {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        border-top: 1px solid var(--medium-gray);
+        padding: min(0.5rem, 0.5vh);
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .page-nav {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .reader-wrapper {
+        margin: 0;
+    }
+
+    .reader-container {
+        padding: min(1rem, 4vh);
+    }
+
+    .reader-content {
+        line-height: 1.35;
+    }
+
+    .nav-button, .exit-button {
+        padding: min(0.35rem, 0.75vh), (0.9rem, 1.5vh);
+        font-size: min(0.9rem, 1.5vh);
+    }
+
+    .nav-button {
+        min-width: min(40px, 8vh)
+    }
+
+    .page-indicator {
+        font-size: (0.8rem, 1.5vh);
+    }
+
+    .blank {
+        padding: 0 0.15rem;
+        margin: 0 0.15rem;
+        min-width: 1.5em;
+    }
+
+    .keyboard-toggle {
+        display: none;
     }
 }

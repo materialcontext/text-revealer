@@ -1,19 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { parseText, parseJson, prepareForReader } from '../lib/parser';
-import { saveFile } from '../lib/storage';
+import { saveFile, saveMultipleAudioFiles } from '../lib/storage';
 import { isJsonFile } from '../lib/utils';
 
 const FileLoader = () => {
   const [filename, setFilename] = useState('');
   const [content, setContent] = useState('');
+  const [audioFiles, setAudioFiles] = useState([]);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [includeAudio, setIncludeAudio] = useState(false);
   const fileInputRef = useRef(null);
+  const audioInputRef = useRef(null);
 
   useEffect(() => {
     setError('');
     setSuccess('');
-  }, [filename, content]);
+  }, [filename, content, audioFiles]);
 
   const loadFile = (file) => {
     setFilename(file.name);
@@ -30,6 +33,11 @@ const FileLoader = () => {
     if (file) loadFile(file);
   };
 
+  const handleAudioFilesChange = (e) => {
+    const files = Array.from(e.target.files);
+    setAudioFiles(files);
+  };
+
   const handleDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
@@ -38,7 +46,7 @@ const FileLoader = () => {
 
   const handleDragOver = (e) => e.preventDefault();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!content) {
       setError('Please enter or upload content');
@@ -55,20 +63,39 @@ const FileLoader = () => {
 
       const processed = prepareForReader(parsed);
       const name = filename || 'Untitled ' + new Date().toLocaleDateString();
-      const success = saveFile(name, processed, content);
+      const fileId = saveFile(name, processed, content);
 
-      if (success) {
-        setSuccess(`Successfully saved "${name}"`);
-        setFilename('');
-        setContent('');
-        setTimeout(() => (window.location.href = '/reader'), 1500);
-      } else {
+      if (!fileId) {
         setError('Failed to save content');
+        return;
       }
+
+      // Handle audio files if included
+      if (includeAudio && audioFiles.length > 0) {
+        if (audioFiles.length !== processed.length) {
+          setError(`Number of audio files (${audioFiles.length}) doesn't match number of pages (${processed.length}). Content was saved without audio.`);
+        } else {
+          const audioSuccess = await saveMultipleAudioFiles(fileId, audioFiles);
+          if (!audioSuccess) {
+            setError('Content was saved but failed to save audio files');
+          }
+        }
+      }
+
+      setSuccess(`Successfully saved "${name}"`);
+      setFilename('');
+      setContent('');
+      setAudioFiles([]);
+      setIncludeAudio(false);
+      setTimeout(() => (window.location.href = '/reader'), 1500);
     } catch (err) {
       console.error(err);
       setError('Failed to process content: ' + err.message);
     }
+  };
+
+  const handleSelectAudio = () => {
+    audioInputRef.current.click();
   };
 
   return (
@@ -124,6 +151,52 @@ Another section with __ and __
           </details>
         </div>
 
+        <div className="audio-option">
+          <label className="checkbox-container">
+            <input
+              type="checkbox"
+              checked={includeAudio}
+              onChange={(e) => setIncludeAudio(e.target.checked)}
+            />
+            <span className="checkbox-label">Include audio files</span>
+          </label>
+
+          {includeAudio && (
+            <div className="audio-files-section">
+              <button
+                type="button"
+                className="audio-select-button"
+                onClick={handleSelectAudio}
+              >
+                Select Audio Files
+              </button>
+              <input
+                type="file"
+                ref={audioInputRef}
+                onChange={handleAudioFilesChange}
+                style={{ display: 'none' }}
+                accept="audio/*"
+                multiple
+              />
+              {audioFiles.length > 0 && (
+                <div className="audio-files-info">
+                  <p>{audioFiles.length} audio file(s) selected</p>
+                  <ul className="audio-files-list">
+                    {audioFiles.slice(0, 5).map((file, index) => (
+                      <li key={index}>{file.name}</li>
+                    ))}
+                    {audioFiles.length > 5 && <li>...and {audioFiles.length - 5} more</li>}
+                  </ul>
+                </div>
+              )}
+              <p className="audio-note">
+                Note: Number of audio files should match the number of pages in your content.
+                Files will be assigned to pages in the order they are selected.
+              </p>
+            </div>
+          )}
+        </div>
+
         <button type="submit" className="submit-button">
           Load Content
         </button>
@@ -133,4 +206,3 @@ Another section with __ and __
 };
 
 export default FileLoader;
-

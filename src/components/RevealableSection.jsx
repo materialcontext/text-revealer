@@ -3,19 +3,26 @@ import React from "react";
 
 // 🔧 Utility: Split text on "__" and interleave blanks from the array
 const tokenizeUnderscoreBlanks = (text, blanks) => {
+    if (!text) return [];
+
     const parts = text.split(/(__)/);
     const tokens = [];
     let blankIndex = 0;
 
     for (let i = 0; i < parts.length; i++) {
         if (parts[i] === "__") {
+            // Make sure we have a corresponding blank
+            const content = blanks && blankIndex < blanks.length
+                ? blanks[blankIndex]
+                : "???";
+
             tokens.push({
                 type: "blank",
                 index: blankIndex,
-                content: blanks[blankIndex]
+                content: content
             });
             blankIndex++;
-        } else {
+        } else if (parts[i]) {  // Only add non-empty text parts
             tokens.push({
                 type: "text",
                 content: parts[i]
@@ -40,10 +47,28 @@ const Blank = ({ index, content, isRevealed, onClick }) => {
 
 // 📄 Main component
 const RevealableSection = ({ section, revealedIndices = [], onBlankClick }) => {
-    if (!section || !section.text || !section.blanks) return null;
+    if (!section) {
+        console.warn("Missing section in RevealableSection");
+        return null;
+    }
 
-    const { text, blanks } = section;
-    const tokens = tokenizeUnderscoreBlanks(text, blanks);
+    if (!section.text) {
+        console.warn("Section missing text:", section);
+        return null;
+    }
+
+    // Make sure blanks is an array even if not provided
+    const blanks = section.blanks || [];
+    const tokens = tokenizeUnderscoreBlanks(section.text, blanks);
+
+    // If no blanks were found, just render the text
+    if (tokens.length === 0 || !tokens.some(token => token.type === "blank")) {
+        return (
+            <div className="text-reveal-section">
+                <p className="text-content">{section.text}</p>
+            </div>
+        );
+    }
 
     return (
         <div className="text-reveal-section">
