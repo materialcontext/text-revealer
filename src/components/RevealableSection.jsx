@@ -1,5 +1,5 @@
-// TextReveal.jsx
-import React, { useState, useEffect } from "react";
+// RevealableSection.jsx
+import React from "react";
 
 // 🔧 Utility: Split text on "__" and interleave blanks from the array
 const tokenizeUnderscoreBlanks = (text, blanks) => {
@@ -31,7 +31,7 @@ const Blank = ({ index, content, isRevealed, onClick }) => {
     return (
         <span
             className={`blank ${isRevealed ? 'revealed' : ''}`}
-            onClick={() => onClick(index, isRevealed)}
+            onClick={() => onClick(index)}
         >
             {isRevealed ? content : "\u00A0\u00A0\u00A0\u00A0"}
         </span>
@@ -39,25 +39,7 @@ const Blank = ({ index, content, isRevealed, onClick }) => {
 };
 
 // 📄 Main component
-const TextReveal = ({ sectionIndex, section }) => {
-    const [revealedIndices, setRevealedIndices] = useState([]);
-
-    useEffect(() => {
-        setRevealedIndices([]); // Reset on section change
-    }, [sectionIndex]);
-
-    const handleBlankClick = (index, isRevealed) => {
-        setRevealedIndices((prev) => {
-            if (isRevealed) {
-                // Hide this and all after
-                return prev.filter((i) => i < index);
-            } else {
-                // Reveal this and all before
-                return Array.from({ length: index + 1 }, (_, i) => i);
-            }
-        });
-    };
-
+const RevealableSection = ({ section, revealedIndices = [], onBlankClick }) => {
     if (!section || !section.text || !section.blanks) return null;
 
     const { text, blanks } = section;
@@ -75,7 +57,7 @@ const TextReveal = ({ sectionIndex, section }) => {
                             index={token.index}
                             content={token.content}
                             isRevealed={revealedIndices.includes(token.index)}
-                            onClick={handleBlankClick}
+                            onClick={onBlankClick}
                         />
                     )
                 )}
@@ -84,5 +66,4 @@ const TextReveal = ({ sectionIndex, section }) => {
     );
 };
 
-export default TextReveal;
-
+export default RevealableSection;

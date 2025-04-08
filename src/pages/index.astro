@@ -31,7 +31,15 @@ import FileHistory from '../components/FileHistory';
       </div>
     </section>
 
-    <section class="text-format">
+    <section class="file-history-section">
+      <FileHistory client:load />
+    </section>
+
+    <section class="file-loader-section">
+      <FileLoader client:load />
+    </section>
+
+        <section class="text-format">
       <h2>Text Format Guide</h2>
       <div class="format-box">
         <p>Use this format:</p>
@@ -54,14 +62,6 @@ another paragraph with __
           <li>Separate pages with "PAGE" (or two newlines)</li>
         </ul>
       </div>
-    </section>
-
-    <section class="file-loader-section">
-      <FileLoader client:load />
-    </section>
-
-    <section class="file-history-section">
-      <FileHistory client:load />
     </section>
   </div>
 </MainLayout>

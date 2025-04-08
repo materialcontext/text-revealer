@@ -1,11 +1,11 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
-import ReaderView from '../components/ReaderView.jsx';
+import PageManager from '../components/PageManager.jsx';
 ---
 
 <MainLayout title="Text Reveal - Reader" hideNav={true} hideFooter={true}>
   <div class="reader-wrapper">
-    <ReaderView client:load />
+    <PageManager client:load />
   </div>
 </MainLayout>
 
