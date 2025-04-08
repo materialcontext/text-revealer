@@ -235,33 +235,3 @@
   outline: none;
   box-shadow: 0 0 0 3px var(--primary-light), var(--shadow-lg);
 }
-
-// Responsive adjustments for heavily zoomed view
-@media (min-resolution: 150dpi) {
-  .reader-container {
-    padding: var(--space-4);
-  }
-
-  .page-title {
-    margin-bottom: var(--space-3);
-  }
-
-  .text-reveal-section {
-    margin-bottom: var(--space-3);
-  }
-
-  .reader-content {
-    line-height: 1.5;
-    font-size: var(--text-base);
-  }
-
-  .blank, .revealed {
-    padding: 0 var(--space-1);
-    margin: 0 var(--space-1);
-    min-width: 2em;
-  }
-
-  .keyboard-toggle {
-    display: none;
-  }
-}

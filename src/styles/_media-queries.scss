@@ -120,7 +120,7 @@
 }
 
 // Very small screens
-@media (max-width: 480px) {
+@include mobile-only {
   .reader-container {
     padding: var(--space-3);
     border-radius: var(--radius-md);
@@ -205,7 +205,7 @@
 }
 
 // Tablet-sized screens
-@media (min-width: 481px) and (max-width: 768px) {
+@include tablet {
   // Adjust instruction grid layout
   .instruction-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -233,7 +233,7 @@
 }
 
 // Desktop screens - horizontal instruction grid
-@media (min-width: 769px) {
+@include desktop {
   .instruction-grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -251,7 +251,7 @@
 }
 
 // Extra large screens
-@media (min-width: 1200px) {
+@include large-desktop {
   .container {
     max-width: var(--container-width);
     margin: 0 auto;
