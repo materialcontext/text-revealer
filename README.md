@@ -1,48 +1,94 @@
-# Astro Starter Kit: Basics
+# Text Reveal
 
-```sh
-npm create astro@latest -- --template basics
+Text Reveal is an interactive web application designed to help with learning and teaching by creating engaging text-based exercises with hidden blanks.
+
+## 🚀 Features
+
+- **Blank Text Reveal**: Create documents with hidden blanks that can be progressively revealed
+- **Audio Support**: Add audio files for each page to enhance learning experience
+- **Local Storage**: Save and manage multiple documents in your browser
+- **Responsive Design**: Works on desktop and mobile devices
+- **Keyboard Navigation**: Easy navigation using arrow keys
+
+## 📦 Technologies Used
+
+- **Frontend**: React, Astro
+- **Styling**: SCSS with CSS Variables
+- **State Management**: Local Storage
+- **Build Tool**: Vite (via Astro)
+
+## 🛠️ Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or later)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/text-reveal.git
+cd text-reveal
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+2. Install dependencies
+```bash
+npm install
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+3. Run the development server
+```bash
+npm run dev
+```
 
-## 🧞 Commands
+4. Open `http://localhost:3000` in your browser
 
-All commands are run from the root of the project, from a terminal:
+## 📝 Usage
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+### Creating a Document
 
-## 👀 Want to learn more?
+1. Go to the home page
+2. Upload a text file or paste content directly
+3. Format your text using double underscores `__` for blanks
+4. Provide answers in square brackets `[]`
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+#### Example Format
+```
+Title of the Page,
+
+This is a sample text with __ and __.
+[first blank, second blank]
+
+PAGE
+
+Next Page Title,
+
+Another paragraph with __.
+[another blank]
+```
+
+## 🔑 Keyboard Controls
+
+- `→`: Reveal next blank
+- `←`: Hide last blank
+- `↓`: Next page
+- `↑`: Previous page
+
+## 💾 Local Storage
+
+- Documents are saved locally in your browser
+- Manage saved documents in the Browse Files section
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is open source. [Add specific license details]
+
+## 🙏 Acknowledgments
+
+- Inspired by interactive learning techniques
+- Built with Astro and React
