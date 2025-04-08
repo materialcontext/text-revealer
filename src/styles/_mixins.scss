@@ -97,6 +97,16 @@
   }
 }
 
+@mixin button-success {
+  @include button-base;
+  background-color: var(--success-color);
+  color: var(--text-inverted);
+
+  &:hover:not(:disabled) {
+    background-color: darken(#00c389, 10%);
+  }
+}
+
 // Form input styles
 @mixin input-base {
   width: 100%;

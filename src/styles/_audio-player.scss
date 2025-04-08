@@ -1,52 +1,6 @@
 /*
- * Audio player styles
+ * Audio component styles - updated with fixes
  */
-
-// Control bar container
-.control-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-3) var(--space-4);
-  border-top: 1px solid var(--border-color);
-  background-color: var(--gray-50);
-  margin-top: var(--space-6);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-}
-
-// Navigation section
-.navigation-section {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-// Page indicator
-.page-indicator {
-  font-size: var(--text-sm);
-  color: var(--text-light);
-  font-weight: var(--font-medium);
-  padding: var(--space-1) var(--space-2);
-  background-color: var(--gray-100);
-  border-radius: var(--radius-md);
-}
-
-// Audio section
-.audio-section {
-  flex: 1;
-  margin: 0 var(--space-4);
-  max-width: 50%;
-
-  @include mobile-only {
-    max-width: 100%;
-  }
-}
-
-// Exit section
-.exit-section {
-  display: flex;
-  justify-content: flex-end;
-}
 
 // Audio player
 .audio-player {
@@ -107,7 +61,6 @@
 
   &:hover {
     background-color: var(--primary-dark);
-    transform: scale(1.05);
   }
 
   &.pause {
@@ -201,89 +154,98 @@
   }
 }
 
-// Audio uploader
-.audio-uploader-container {
+// Control bar - with fixed version for zoomed view
+.control-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4);
+  border-top: 1px solid var(--border-color);
+  background-color: var(--gray-50);
+  margin-top: var(--space-6);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  transition: all var(--transition-fast);
+
+  &.control-bar-fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-50);
+    margin-top: 0;
+    border-radius: 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Audio uploader (revised)
+.audio-uploader {
   background-color: white;
-  border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
   margin-bottom: var(--space-6);
   box-shadow: var(--shadow-md);
-  position: relative;
-}
-
-.audio-uploader {
-  @include flex(column, flex-start, stretch);
+  border: 1px solid var(--border-color);
 
   h3 {
     margin-bottom: var(--space-4);
-    color: var(--text-dark);
     font-size: var(--text-lg);
-  }
-}
-
-.instruction {
-  margin-bottom: var(--space-4);
-  font-size: var(--text-sm);
-  color: var(--text-color);
-  background-color: var(--primary-light);
-  padding: var(--space-3);
-  border-radius: var(--radius-md);
-  border-left: 3px solid var(--primary-color);
-}
-
-.upload-button {
-  @include button-secondary;
-  margin-bottom: var(--space-4);
-  align-self: flex-start;
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-}
-
-.file-format-note {
-  font-size: var(--text-xs);
-  color: var(--text-light);
-  margin-top: var(--space-2);
-  font-style: italic;
-}
-
-.dismiss-button {
-  @include button-ghost;
-  position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
-  font-size: var(--text-sm);
-  padding: var(--space-1) var(--space-2);
-}
-
-// Responsive adjustments
-@include mobile-only {
-  .control-bar {
-    flex-direction: column;
-    gap: var(--space-4);
+    color: var(--text-dark);
   }
 
-  .navigation-section,
-  .audio-section,
-  .exit-section {
-    width: 100%;
-    max-width: 100%;
-    justify-content: space-between;
+  .instruction {
+    margin-bottom: var(--space-4);
+    padding: var(--space-3);
+    background-color: var(--primary-light);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--primary-color);
+    font-size: var(--text-sm);
   }
 
-  .audio-section {
-    order: -1;
+  .file-selection {
+    margin-bottom: var(--space-4);
   }
 
-  .audio-controls {
-    margin: 0 var(--space-2);
+  .selected-files {
+    margin-top: var(--space-3);
+    padding: var(--space-3);
+    background-color: var(--gray-50);
+    border-radius: var(--radius-md);
+
+    p {
+      font-weight: var(--font-medium);
+      margin-bottom: var(--space-2);
+    }
+
+    .file-list {
+      list-style-type: disc;
+      padding-left: var(--space-6);
+      font-size: var(--text-sm);
+      color: var(--text-light);
+
+      li {
+        margin-bottom: var(--space-1);
+      }
+    }
   }
 
-  .time-display {
-    width: 2.8rem;
+  .audio-uploader-actions {
+    display: flex;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+
+    button {
+      flex: 1;
+    }
+  }
+
+  .file-format-note {
     font-size: var(--text-xs);
+    color: var(--text-light);
+    font-style: italic;
   }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

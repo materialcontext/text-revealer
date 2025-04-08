@@ -2,39 +2,39 @@
  * Variables and Design Tokens
  */
 
-// Color Palette - Modern, accessible colors inspired by Wise/Intuit
+// Color Palette - More professional, less vibrant colors
 :root {
   // Primary colors
-  --primary-color: #00b9ff; // Primary blue - bright, engaging
-  --primary-dark: #0095cc; // Darker blue for hover states
-  --primary-light: #e6f7ff; // Light blue for backgrounds
+  --primary-color: #3b82f6; // More subdued blue
+  --primary-dark: #2563eb; // Darker blue for hover states
+  --primary-light: #eff6ff; // Lighter blue background
 
   // Secondary colors
-  --secondary-color: #6b47ed; // Purple for secondary actions
-  --secondary-dark: #5636cb; // Darker purple for hover
-  --secondary-light: #f0ebff; // Light purple for backgrounds
+  --secondary-color: #6366f1; // More muted purple
+  --secondary-dark: #4f46e5; // Darker purple for hover
+  --secondary-light: #eef2ff; // Lighter purple background
 
   // Accent colors
-  --accent-color: #00d6b5; // Teal for accents and success states
-  --accent-dark: #00b396; // Darker teal for hover
-  --accent-light: #e6fff9; // Light teal for backgrounds
+  --accent-color: #10b981; // More muted teal
+  --accent-dark: #059669; // Darker teal for hover
+  --accent-light: #ecfdf5; // Lighter teal background
 
-  // Neutral colors
-  --gray-50: #f7fafc;  // Lightest gray for backgrounds
-  --gray-100: #edf2f7; // Light gray for alternate backgrounds
-  --gray-200: #e2e8f0; // Medium light gray for borders
-  --gray-300: #cbd5e0; // Medium gray for disabled elements
-  --gray-400: #a0aec0; // Medium dark gray for icons
-  --gray-500: #718096; // Dark gray for secondary text
-  --gray-600: #4a5568; // Darker gray for primary text
-  --gray-700: #2d3748; // Very dark gray for headings
-  --gray-800: #1a202c; // Nearly black for emphasized text
+  // Neutral colors - slightly warmer grays
+  --gray-50: #f9fafb;  // Lightest gray for backgrounds
+  --gray-100: #f3f4f6; // Light gray for alternate backgrounds
+  --gray-200: #e5e7eb; // Medium light gray for borders
+  --gray-300: #d1d5db; // Medium gray for disabled elements
+  --gray-400: #9ca3af; // Medium dark gray for icons
+  --gray-500: #6b7280; // Dark gray for secondary text
+  --gray-600: #4b5563; // Darker gray for primary text
+  --gray-700: #374151; // Very dark gray for headings
+  --gray-800: #1f2937; // Nearly black for emphasized text
 
-  // Functional colors
-  --success-color: #00c389; // Green for success
-  --warning-color: #ffc555; // Amber for warnings
-  --error-color: #ff4d6a;   // Red for errors
-  --info-color: #00b9ff;    // Blue for information
+  // Functional colors - more muted
+  --success-color: #10b981; // Green for success
+  --warning-color: #f59e0b; // Amber for warnings
+  --error-color: #ef4444;   // Red for errors
+  --info-color: #3b82f6;    // Blue for information
 
   // Text colors
   --text-color: var(--gray-700);
@@ -53,13 +53,13 @@
   --blank-color: var(--gray-100);
   --revealed-color: var(--primary-light);
 
-  // Shadow styles
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.03);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.03);
-  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  // Shadow styles - slightly more subtle
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.04), 0 4px 6px rgba(0, 0, 0, 0.02);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.04);
 
-  // Typography
+  // Typography - slightly more readable
   --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-family-mono: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
@@ -97,11 +97,11 @@
   --space-12: 3rem;    // 48px
   --space-16: 4rem;    // 64px
 
-  // Border radius
+  // Border radius - slightly more square for professional look
   --radius-sm: 0.125rem; // 2px
   --radius-md: 0.25rem;  // 4px
-  --radius-lg: 0.5rem;   // 8px
-  --radius-xl: 0.75rem;  // 12px
+  --radius-lg: 0.375rem; // 6px (reduced from 8px)
+  --radius-xl: 0.5rem;   // 8px (reduced from 12px)
   --radius-full: 9999px;
 
   // Transitions

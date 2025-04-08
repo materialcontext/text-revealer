@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import RevealableSection from './RevealableSection';
 import ControlBar from './ControlBar';
-import AudioUploader from './AudioUploader';
 import { parseText, parseJson, prepareForReader } from '../lib/parser';
-import { getAudioForPage, hasAudioForAllPages, saveMultipleAudioFiles } from '../lib/storage';
+import { getAudioForPage } from '../lib/storage';
 
 const normalizeToPages = (input) => {
     if (Array.isArray(input)) {
@@ -32,8 +31,8 @@ const PageManager = ({ file: fileProp }) => {
     // Track a single array of revealed blanks for the entire page
     const [pageRevealStates, setPageRevealStates] = useState({});
     const [audioSrc, setAudioSrc] = useState(null);
-    const [showAudioUploader, setShowAudioUploader] = useState(false);
-    const [hasCheckedAudio, setHasCheckedAudio] = useState(false);
+
+    // Removed showAudioUploader state - no longer needed with new UI flow
 
     // Load from localStorage on mount if no file prop was passed
     useEffect(() => {
@@ -62,24 +61,6 @@ const PageManager = ({ file: fileProp }) => {
             setAudioSrc(audio);
         }
     }, [fileId, currentPageIndex]);
-
-    // Check if we should offer bulk audio upload
-    useEffect(() => {
-        if (fileId && file && !hasCheckedAudio) {
-            const rawPages = normalizeToPages(file.content);
-            const pages = prepareForReader(rawPages);
-
-            const hasAllAudio = hasAudioForAllPages(fileId, pages.length);
-
-            // Only show the uploader if we don't have audio for all pages
-            // and we haven't checked yet (to avoid showing on every render)
-            if (!hasAllAudio) {
-                setShowAudioUploader(true);
-            }
-
-            setHasCheckedAudio(true);
-        }
-    }, [fileId, file, hasCheckedAudio]);
 
     // Handler for blank clicks - working across sections
     const handleBlankClick = (sectionIndex, blankIndex, pages) => {
@@ -183,14 +164,7 @@ const PageManager = ({ file: fileProp }) => {
         window.location.href = '/';
     };
 
-    const handleAudioUploadSuccess = () => {
-        setShowAudioUploader(false);
-        // Refresh audio for current page
-        if (fileId) {
-            const audio = getAudioForPage(fileId, currentPageIndex);
-            setAudioSrc(audio);
-        }
-    };
+    // Removed AudioUploader handling methods since we're handling audio upload on the home page now
 
     if (!file?.content) {
         return <div className="container">No file loaded.</div>;
@@ -203,22 +177,6 @@ const PageManager = ({ file: fileProp }) => {
     return (
         <div className="container">
             <div className="reader-wrapper">
-                {showAudioUploader && (
-                    <div className="audio-uploader-container">
-                        <AudioUploader
-                            fileId={fileId}
-                            pageCount={pages.length}
-                            onSuccess={handleAudioUploadSuccess}
-                        />
-                        <button
-                            className="dismiss-button"
-                            onClick={() => setShowAudioUploader(false)}
-                        >
-                            Dismiss
-                        </button>
-                    </div>
-                )}
-
                 <div className="reader-container">
                     <h2>{currentPage.title}</h2>
 

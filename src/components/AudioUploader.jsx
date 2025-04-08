@@ -7,16 +7,25 @@ import { saveMultipleAudioFiles } from '../lib/storage';
  * @param {string} props.fileId - ID of the text file
  * @param {number} props.pageCount - Total number of pages
  * @param {function} props.onSuccess - Callback on successful upload
+ * @param {function} props.onCancel - Callback when upload is cancelled
  */
-const AudioUploader = ({ fileId, pageCount, onSuccess }) => {
+const AudioUploader = ({ fileId, pageCount, onSuccess, onCancel }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
 
-  const handleFileChange = async (e) => {
-    const files = Array.from(e.target.files);
+  const handleFileChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    setFiles(selectedFiles);
+    setError('');
+  };
 
-    if (!files.length) return;
+  const handleUpload = async () => {
+    if (!files.length) {
+      setError('Please select audio files first');
+      return;
+    }
 
     setError('');
     setLoading(true);
@@ -25,6 +34,7 @@ const AudioUploader = ({ fileId, pageCount, onSuccess }) => {
       // Validate number of files
       if (files.length !== pageCount) {
         setError(`Please select exactly ${pageCount} audio files, one for each page.`);
+        setLoading(false);
         return;
       }
 
@@ -32,6 +42,7 @@ const AudioUploader = ({ fileId, pageCount, onSuccess }) => {
       const invalidFiles = files.filter(file => !file.type.startsWith('audio/'));
       if (invalidFiles.length > 0) {
         setError('Some selected files are not audio files.');
+        setLoading(false);
         return;
       }
 
@@ -63,7 +74,7 @@ const AudioUploader = ({ fileId, pageCount, onSuccess }) => {
     }
   };
 
-  const handleSelectFolder = () => {
+  const handleSelectFiles = () => {
     fileInputRef.current.click();
   };
 
@@ -77,22 +88,54 @@ const AudioUploader = ({ fileId, pageCount, onSuccess }) => {
 
       {error && <div className="error-message">{error}</div>}
 
-      <button
-        className="upload-button"
-        onClick={handleSelectFolder}
-        disabled={loading}
-      >
-        {loading ? 'Uploading...' : 'Select Audio Files'}
-      </button>
+      <div className="file-selection">
+        <button
+          className="upload-button"
+          onClick={handleSelectFiles}
+          disabled={loading}
+        >
+          {files.length > 0 ? 'Change Selection' : 'Select Audio Files'}
+        </button>
 
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        style={{ display: 'none' }}
-        accept="audio/*"
-        multiple
-      />
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          style={{ display: 'none' }}
+          accept="audio/*"
+          multiple
+        />
+
+        {files.length > 0 && (
+          <div className="selected-files">
+            <p>{files.length} file(s) selected</p>
+            <ul className="file-list">
+              {files.slice(0, 3).map((file, index) => (
+                <li key={index}>{file.name}</li>
+              ))}
+              {files.length > 3 && <li>...and {files.length - 3} more</li>}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      <div className="audio-uploader-actions">
+        <button
+          className="btn-primary"
+          onClick={handleUpload}
+          disabled={loading || files.length === 0}
+        >
+          {loading ? 'Uploading...' : 'Upload Audio Files'}
+        </button>
+
+        <button
+          className="btn-ghost"
+          onClick={onCancel}
+          disabled={loading}
+        >
+          Skip
+        </button>
+      </div>
 
       <div className="file-format-note">
         <strong>Note:</strong> Accepted formats include MP3, WAV, OGG and other browser-supported audio formats.

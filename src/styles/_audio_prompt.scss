@@ -1,0 +1,107 @@
+/*
+ * Audio prompt styles for the file loader
+ */
+
+// Audio prompt container
+.audio-prompt-container {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+
+  h2 {
+    font-size: var(--text-xl);
+    color: var(--text-dark);
+    margin-bottom: var(--space-3);
+  }
+
+  p {
+    color: var(--text-color);
+    margin-bottom: var(--space-4);
+  }
+
+  strong {
+    font-weight: var(--font-semibold);
+  }
+}
+
+// Audio info section
+.audio-info {
+  background-color: var(--gray-50);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  border-left: 3px solid var(--secondary-color);
+
+  p {
+    margin-bottom: var(--space-3);
+  }
+}
+
+// Audio select button
+.audio-select-button {
+  @include button-secondary;
+  margin-bottom: var(--space-4);
+}
+
+// Audio files info
+.audio-files-info {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background-color: white;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+
+  p {
+    margin-bottom: var(--space-2);
+    font-weight: var(--font-medium);
+  }
+}
+
+// Audio files list
+.audio-files-list {
+  margin: var(--space-2) 0;
+  padding-left: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--text-light);
+  list-style-type: disc;
+
+  li {
+    margin-bottom: var(--space-1);
+  }
+}
+
+// Audio prompt actions
+.audio-prompt-actions {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+
+  button {
+    flex: 1;
+  }
+}
+
+// Audio notice
+.audio-notice {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background-color: var(--primary-light);
+  border-radius: var(--radius-md);
+
+  p {
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-2);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .audio-note {
+    font-size: var(--text-xs);
+    color: var(--text-light);
+    font-style: italic;
+  }
+}

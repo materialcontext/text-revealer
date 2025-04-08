@@ -33,7 +33,7 @@ const tokenizeUnderscoreBlanks = (text, blanks) => {
     return tokens;
 };
 
-// 🧱 <Blank /> component
+// 🧱 <Blank /> component with updated styling
 const Blank = ({ index, content, isRevealed, onClick }) => {
     return (
         <span

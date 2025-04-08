@@ -18,7 +18,7 @@ import CompactFileHistory from '../components/FileHistory';
       <div class="instruction-grid">
         <div class="instruction-item">
           <h3>1. Upload Content</h3>
-          <p>Upload a file or paste text using the right format. Content is saved locally in your browser.</p>
+          <p>Upload a file or paste text using the specified format. Content is saved locally in your browser.</p>
         </div>
         <div class="instruction-item">
           <h3>2. Reveal Text</h3>
@@ -26,7 +26,7 @@ import CompactFileHistory from '../components/FileHistory';
         </div>
         <div class="instruction-item">
           <h3>3. Navigate</h3>
-          <p>Use up/down arrows or buttons to move between pages. Click revealed text to hide it again.</p>
+          <p>Use up/down arrows or buttons to move between pages. Add audio for each page if needed.</p>
         </div>
       </div>
     </section>
@@ -42,30 +42,7 @@ import CompactFileHistory from '../components/FileHistory';
       </div>
     </section>
 
-    <section class="text-format">
-      <h2>Text Format Guide</h2>
-      <div class="format-box">
-        <p>Use this format:</p>
-        <pre>
-title,
-
-this is a text with blanks like __ and __
-[answer1, answer2]
-
-PAGE
-
-next page title,
-another paragraph with __
-[answer]
-        </pre>
-        <ul class="format-rules">
-          <li>Start each section with a title followed by a comma</li>
-          <li>Use <code>__</code> for blanks</li>
-          <li>Put answers in <code>[]</code> after the paragraph</li>
-          <li>Separate pages with "PAGE" (or two newlines)</li>
-        </ul>
-      </div>
-    </section>
+    <!-- Removed the separate text format guide section -->
   </div>
 </MainLayout>
 

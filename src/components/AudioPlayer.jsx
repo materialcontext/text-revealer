@@ -13,6 +13,24 @@ const AudioPlayer = ({ audioSrc, onLoadAudio }) => {
   const audioRef = useRef(null);
   const fileInputRef = useRef(null);
 
+  // Listen for audio updates from the control bar
+  useEffect(() => {
+    const handleAudioUpdate = (event) => {
+      if (event.detail && event.detail.src) {
+        // Update the audio source directly
+        if (audioRef.current) {
+          audioRef.current.src = event.detail.src;
+          audioRef.current.load();
+        }
+      }
+    };
+
+    window.addEventListener('audioUpdated', handleAudioUpdate);
+    return () => {
+      window.removeEventListener('audioUpdated', handleAudioUpdate);
+    };
+  }, []);
+
   useEffect(() => {
     // Reset player state when audio source changes
     if (audioRef.current) {

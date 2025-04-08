@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AudioPlayer from './AudioPlayer';
 import { saveAudioFile, getAudioForPage } from '../lib/storage';
 
@@ -25,25 +25,44 @@ const ControlBar = ({
   const isFirstPage = currentPage === 0;
   const isLastPage = currentPage === totalPages - 1;
   const [loading, setLoading] = useState(false);
+  const [currentPageSaved, setCurrentPageSaved] = useState(currentPage);
+
+  // Keep track of the current page to prevent reset when adding audio
+  useEffect(() => {
+    setCurrentPageSaved(currentPage);
+  }, [currentPage]);
 
   const handleLoadAudio = async (file) => {
     if (!fileId) return;
 
     setLoading(true);
     try {
-      await saveAudioFile(fileId, currentPage, file);
-      // Force refresh to update audio player
-      window.location.reload();
+      // Save the current page to avoid navigation reset
+      const savedPage = currentPageSaved;
+
+      await saveAudioFile(fileId, savedPage, file);
+
+      // Use a more targeted approach than full page reload
+      const newAudioSrc = await getAudioForPage(fileId, savedPage);
+
+      // Force refresh the audio player without page reload
+      window.dispatchEvent(new CustomEvent('audioUpdated', {
+        detail: { src: newAudioSrc }
+      }));
+
+      setLoading(false);
     } catch (error) {
       console.error('Error saving audio file:', error);
       alert('Failed to save audio file. Please try again.');
-    } finally {
       setLoading(false);
     }
   };
 
+  // Determine if we're in a high DPI context for responsive design
+  const isHighDpi = window.matchMedia && window.matchMedia('(min-resolution: 150dpi)').matches;
+
   return (
-    <div className="control-bar">
+    <div className={`control-bar ${isHighDpi ? 'control-bar-fixed' : ''}`}>
       <div className="navigation-section">
         <button
           className={`nav-button prev ${isFirstPage ? 'hidden' : ''}`}
