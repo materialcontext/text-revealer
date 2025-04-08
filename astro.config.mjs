@@ -8,4 +8,14 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  // Explicitly enable SCSS processing
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          // Optional: Add any global SCSS variables here
+        }
+      }
+    }
+  }
 });
