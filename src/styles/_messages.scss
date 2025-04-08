@@ -205,6 +205,11 @@
   }
 }
 
+// grid for instructions
+.instruction-grid {
+  display: grid;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

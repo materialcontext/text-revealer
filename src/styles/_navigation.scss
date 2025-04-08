@@ -51,14 +51,6 @@
       border-bottom-color: white;
     }
   }
-
-  @include mobile-only {
-    gap: var(--space-3);
-
-    a {
-      font-size: var(--text-sm);
-    }
-  }
 }
 
 // App header (different from navigation)
@@ -70,14 +62,6 @@
 
   h1 {
     margin-bottom: 0;
-  }
-
-  @include mobile-only {
-    padding: var(--space-4) 0;
-    margin-bottom: var(--space-4);
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-4);
   }
 }
 
@@ -180,5 +164,10 @@
     white-space: nowrap;
     margin: 0 calc(-1 * var(--space-4));
     padding: 0 var(--space-4);
+  }
+
+  .app-header {
+    padding: var(--space-4) 0;
+    margin-bottom: var(--space-4);
   }
 }
