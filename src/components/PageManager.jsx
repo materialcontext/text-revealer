@@ -10,9 +10,12 @@ const normalizeToPages = (input) => {
     if (typeof input === 'string') {
         try {
             const maybeJson = JSON.parse(input);
-            return Array.isArray(maybeJson) ? maybeJson : parseJson(input);
+            const receivedText = Array.isArray(maybeJson) ? maybeJson : parseJson(input);
+            return receivedText;
         } catch {
-            return parseText(input); // Plain text fallback
+            const receivedText = parseText(input)
+            console.log(receivedText)
+            return receivedText; // Plain text fallback
         }
     }
 
