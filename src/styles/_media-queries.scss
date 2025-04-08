@@ -1,104 +1,4 @@
 /*
- * Media queries
- */
-
-// This file contains additional responsive adjustments
-// that are not already handled by the mixins in individual files
-
-// Mobile devices
-@include mobile-only {
-  .hide-on-mobile {
-    display: none !important;
-  }
-
-  h1 {
-    font-size: var(--text-2xl);
-  }
-
-  h2 {
-    font-size: var(--text-xl);
-  }
-
-  .container {
-    padding-left: var(--space-4);
-    padding-right: var(--space-4);
-  }
-
-  .main-nav {
-    .nav-container {
-      flex-direction: column;
-      padding: var(--space-3) var(--space-4);
-    }
-
-    .nav-links {
-      width: 100%;
-      justify-content: space-between;
-    }
-  }
-
-  .app-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-4);
-  }
-
-  .instruction-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-// Tablet devices
-@include tablet {
-  .hide-on-tablet {
-    display: none !important;
-  }
-
-  .show-on-tablet {
-    display: block !important;
-  }
-
-  .grid-cols-tablet-2 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-// Desktop devices
-@include desktop {
-  .hide-on-desktop {
-    display: none !important;
-  }
-
-  .show-on-desktop {
-    display: block !important;
-  }
-
-  .two-column-layout {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: var(--space-6);
-  }
-
-  .grid-cols-desktop-3 {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .grid-cols-desktop-4 {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-// Extra large displays
-@include large-desktop {
-  .container {
-    max-width: var(--container-width);
-  }
-
-  .grid-cols-xl-5 {
-    grid-template-columns: repeat(5, 1fr);
-  }
-}
-
-/*
  * Enhanced media queries for high DPI displays and zoom behavior
  */
 
@@ -175,7 +75,6 @@
 
   .nav-button {
     min-width: 40px;
-  }: 40px;
   }
 
   .page-indicator {
@@ -207,7 +106,7 @@
   }
 
   .seek-slider {
-    height: l3px;
+    height: 3px;
   }
 
   .exit-section {
@@ -246,6 +145,8 @@
 
   .navigation-section {
     order: 0;
+    display: flex;
+    justify-content: space-between;
   }
 
   .audio-section {
@@ -267,93 +168,150 @@
   }
 
   .nav-button {
-    min-width
+    min-width: 40px;
+  }
+
+  // Fix the instruction grid on mobile
+  .instruction-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  // Fix or divider
+  .or-divider {
+    &::before, &::after {
+      width: 30%;
+    }
+  }
+
+  // More compact audio player
+  .audio-player {
+    height: 40px;
+  }
+
+  .time-display {
+    width: 2.8rem;
+  }
+
+  // Audio prompt in a more compact form
+  .audio-prompt-container {
+    padding: var(--space-3);
+  }
+
+  .audio-prompt-actions {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+}
+
+// Tablet-sized screens
+@media (min-width: 481px) and (max-width: 768px) {
+  // Adjust instruction grid layout
+  .instruction-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  // Fix file loader with history layout
+  .file-loader-with-history {
+    grid-template-columns: 1fr;
+  }
+
+  // Fix or divider
+  .or-divider {
+    &::before, &::after {
+      width: 35%;
+    }
+  }
+
+  .control-bar {
+    padding: var(--space-3);
+  }
+
+  .audio-player {
+    min-width: 180px;
+  }
+}
+
+// Desktop screens - horizontal instruction grid
+@media (min-width: 769px) {
+  .instruction-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .file-loader-with-history {
+    grid-template-columns: 3fr 2fr;
+  }
+
+  // Fix or divider on wide screens
+  .or-divider {
+    &::before, &::after {
+      width: 40%;
+    }
+  }
+}
+
+// Extra large screens
+@media (min-width: 1200px) {
+  .container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+  }
+
+  .reader-container {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+// Combined high DPI and small screen
+@media (min-resolution: 150dpi) and (max-width: 480px) {
+  .control-bar {
+    flex-direction: column;
+    padding: 6px;
+  }
+
+  .audio-section {
+    max-width: 100%;
+    margin: 8px 0;
+  }
+
+  .navigation-section {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .exit-section {
+    width: 100%;
+  }
+
+  main {
+    padding-bottom: 110px; // Increase padding for larger control bar
+  }
+}
 
 // Print styles
 @media print {
-  body {
-    background: white;
-    color: black;
-    font-size: 12pt;
-    line-height: 1.4;
-  }
-
-  .no-print {
+  .control-bar,
+  .keyboard-help,
+  .keyboard-toggle {
     display: none !important;
-  }
-
-  .page-break-before {
-    page-break-before: always;
-  }
-
-  .page-break-after {
-    page-break-after: always;
-  }
-
-  a[href]::after {
-    content: " (" attr(href) ")";
-    font-size: 90%;
-    color: #333;
-  }
-
-  a[href^="#"]::after,
-  a[href^="javascript:"]::after {
-    content: "";
-  }
-
-  img {
-    max-width: 100% !important;
-    page-break-inside: avoid;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    page-break-after: avoid;
   }
 
   .reader-container {
     box-shadow: none;
     border: 1px solid #ccc;
+    padding: 1cm;
   }
 
   .blank, .revealed {
     border: 1px solid black;
-    color: black !important;
-    background: white;
-  }
-}
-
-// High-contrast mode (for accessibility)
-@media (prefers-contrast: high) {
-  :root {
-    --primary-color: #0052cc;
-    --primary-dark: #003d99;
-    --primary-light: #d9e9ff;
-    --secondary-color: #5f25b8;
-    --secondary-dark: #40178a;
-    --text-color: #000;
-    --text-light: #333;
-    --border-color: #000;
+    print-color-adjust: exact;
   }
 
-  button, .button, .btn-primary, .btn-secondary {
-    border: 1px solid black;
-  }
-
-  a {
-    text-decoration: underline;
-  }
-
-  .blank {
-    border: 2px dashed black;
-  }
-
-  .revealed {
-    border: 2px solid black;
-  }
-
-  .card, .file-card {
-    border: 1px solid black;
-    box-shadow: none;
+  // Force page breaks between pages
+  .reader-wrapper + .reader-wrapper {
+    page-break-before: always;
   }
 }
 
@@ -366,38 +324,7 @@
     scroll-behavior: auto !important;
   }
 
-  .card:hover, .file-card:hover {
-    transform: none !important;
-  }
-
-  .blank:hover {
+  .blank:hover, .card:hover, .file-card:hover {
     transform: none !important;
   }
 }
-
-// Dark mode (if needed in the future)
-// Commented out since we're not implementing dark mode yet
-/*
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background-color: #121212;
-    --background-elevated: #1e1e1e;
-    --text-color: #e0e0e0;
-    --text-light: #a0a0a0;
-    --text-dark: #ffffff;
-    --border-color: #333;
-    --gray-50: #1e1e1e;
-    --gray-100: #2a2a2a;
-    --gray-200: #333;
-    --gray-300: #444;
-    --gray-400: #555;
-    --gray-500: #777;
-    --gray-600: #999;
-    --gray-700: #bbb;
-    --gray-800: #ddd;
-  }
-
-  // Override elements for dark mode
-  // ...
-}
-*/
