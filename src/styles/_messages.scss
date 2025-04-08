@@ -1,0 +1,286 @@
+/*
+ * Message, alert, and notification styles
+ */
+
+// Base message
+.message {
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-md);
+  border-left: 4px solid transparent;
+}
+
+// Success message
+.success-message {
+  @extend .message;
+  background-color: color-mix(in srgb, var(--success-color) 10%, white);
+  border-left-color: var(--success-color);
+  color: darken(#00c389, 20%);
+}
+
+// Error message
+.error-message {
+  @extend .message;
+  background-color: color-mix(in srgb, var(--error-color) 10%, white);
+  border-left-color: var(--error-color);
+  color: darken(#ff4d6a, 20%);
+}
+
+// Warning message
+.warning-message {
+  @extend .message;
+  background-color: color-mix(in srgb, var(--warning-color) 10%, white);
+  border-left-color: var(--warning-color);
+  color: darken(#ffc555, 40%);
+}
+
+// Info message
+.info-message {
+  @extend .message;
+  background-color: color-mix(in srgb, var(--info-color) 10%, white);
+  border-left-color: var(--info-color);
+  color: darken(#00b9ff, 20%);
+}
+
+// Message with icon
+.message-with-icon {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+
+  .message-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+  }
+
+  .message-content {
+    flex: 1;
+  }
+}
+
+// Dismissible message
+.message-dismissible {
+  position: relative;
+  padding-right: var(--space-10);
+
+  .close-button {
+    position: absolute;
+    top: var(--space-2);
+    right: var(--space-2);
+    background: none;
+    border: none;
+    color: currentColor;
+    opacity: 0.6;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+// Toast notifications
+.toast-container {
+  position: fixed;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  z-index: var(--z-50);
+  max-width: 320px;
+}
+
+.toast {
+  @extend .message;
+  background-color: var(--background-elevated);
+  box-shadow: var(--shadow-lg);
+  animation: slide-in-right 0.3s ease-out;
+
+  &.toast-success {
+    border-left-color: var(--success-color);
+  }
+
+  &.toast-error {
+    border-left-color: var(--error-color);
+  }
+
+  &.toast-warning {
+    border-left-color: var(--warning-color);
+  }
+
+  &.toast-info {
+    border-left-color: var(--info-color);
+  }
+
+  &.toast-dismissible {
+    padding-right: var(--space-10);
+  }
+
+  &.toast-with-icon {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .toast-title {
+    font-weight: var(--font-semibold);
+    margin-bottom: var(--space-1);
+  }
+
+  .toast-message {
+    font-size: var(--text-sm);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+// Inline message
+.inline-message {
+  font-size: var(--text-sm);
+  margin-top: var(--space-1);
+
+  &.inline-error {
+    color: var(--error-color);
+  }
+
+  &.inline-success {
+    color: var(--success-color);
+  }
+
+  &.inline-warning {
+    color: var(--warning-color);
+  }
+
+  &.inline-info {
+    color: var(--info-color);
+  }
+}
+
+// Loading messages
+.loading-message {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-light);
+
+  .loading-spinner {
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+}
+
+.loading-audio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  background-color: var(--gray-50);
+  border-radius: var(--radius-md);
+  color: var(--text-light);
+  font-size: var(--text-sm);
+
+  &::before {
+    content: "";
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-right: var(--space-2);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Banner
+.banner {
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--gray-50);
+  text-align: center;
+  font-size: var(--text-sm);
+
+  &.banner-primary {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+  }
+
+  &.banner-success {
+    background-color: color-mix(in srgb, var(--success-color) 10%, white);
+    color: darken(#00c389, 20%);
+  }
+
+  &.banner-warning {
+    background-color: color-mix(in srgb, var(--warning-color) 10%, white);
+    color: darken(#ffc555, 40%);
+  }
+
+  &.banner-error {
+    background-color: color-mix(in srgb, var(--error-color) 10%, white);
+    color: darken(#ff4d6a, 20%);
+  }
+
+  a {
+    text-decoration: underline;
+    font-weight: var(--font-medium);
+  }
+}
+
+// Badge
+.badge {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &.badge-primary {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+  }
+
+  &.badge-secondary {
+    background-color: var(--secondary-light);
+    color: var(--secondary-dark);
+  }
+
+  &.badge-success {
+    background-color: color-mix(in srgb, var(--success-color) 15%, white);
+    color: darken(#00c389, 20%);
+  }
+
+  &.badge-warning {
+    background-color: color-mix(in srgb, var(--warning-color) 15%, white);
+    color: darken(#ffc555, 40%);
+  }
+
+  &.badge-error {
+    background-color: color-mix(in srgb, var(--error-color) 15%, white);
+    color: darken(#ff4d6a, 20%);
+  }
+
+  &.badge-neutral {
+    background-color: var(--gray-100);
+    color: var(--gray-700);
+  }
+}

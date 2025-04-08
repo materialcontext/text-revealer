@@ -1,0 +1,339 @@
+/*
+ * Form styles
+ */
+
+// Form container
+.form {
+  @include flex(column, flex-start, stretch);
+  gap: var(--space-4);
+  width: 100%;
+
+  &.form-compact {
+    gap: var(--space-3);
+  }
+}
+
+// Form group
+.form-group {
+  @include flex(column, flex-start, stretch);
+  gap: var(--space-2);
+}
+
+// Input styles
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="time"],
+input[type="color"],
+select,
+textarea,
+.form-input {
+  @include input-base;
+}
+
+// Labels
+label, .form-label {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-weight: var(--font-medium);
+  color: var(--gray-700);
+
+  &.required::after {
+    content: "*";
+    color: var(--error-color);
+    margin-left: var(--space-1);
+  }
+}
+
+// Select styles
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 16px 12px;
+  padding-right: var(--space-8);
+}
+
+// Textarea styles
+textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+// Checkbox and radio
+.form-checkbox,
+.form-radio {
+  @include flex(row, flex-start, center);
+  gap: var(--space-2);
+  cursor: pointer;
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .checkbox-label {
+    margin-bottom: 0;
+    cursor: pointer;
+  }
+}
+
+// Form validation
+.valid {
+  border-color: var(--success-color) !important;
+}
+
+.invalid {
+  border-color: var(--error-color) !important;
+}
+
+.validation-message {
+  font-size: var(--text-sm);
+  margin-top: var(--space-1);
+
+  &.error {
+    color: var(--error-color);
+  }
+
+  &.success {
+    color: var(--success-color);
+  }
+}
+
+// Input sizes
+.input-sm {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.input-lg {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-lg);
+}
+
+// Input groups
+.input-group {
+  @include flex(row, flex-start, stretch);
+
+  input, select, .form-input {
+    border-radius: 0;
+    z-index: 1;
+
+    &:first-child {
+      border-top-left-radius: var(--radius-md);
+      border-bottom-left-radius: var(--radius-md);
+    }
+
+    &:last-child {
+      border-top-right-radius: var(--radius-md);
+      border-bottom-right-radius: var(--radius-md);
+    }
+  }
+
+  .input-group-text {
+    @include flex(row, center, center);
+    padding: var(--space-2) var(--space-3);
+    background-color: var(--gray-100);
+    border: 1px solid var(--border-color);
+    color: var(--text-light);
+    white-space: nowrap;
+
+    &:first-child {
+      border-top-left-radius: var(--radius-md);
+      border-bottom-left-radius: var(--radius-md);
+    }
+
+    &:last-child {
+      border-top-right-radius: var(--radius-md);
+      border-bottom-right-radius: var(--radius-md);
+    }
+  }
+}
+
+// File input
+.file-input {
+  position: relative;
+
+  input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  .file-input-label {
+    @include button-ghost;
+    display: block;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// Custom range slider
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--gray-200);
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+  }
+
+  &::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Application-specific form elements
+.drop-area {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  text-align: center;
+  margin-bottom: var(--space-4);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background-color: var(--gray-50);
+
+  &:hover {
+    border-color: var(--primary-color);
+    background-color: var(--primary-light);
+  }
+
+  .filename {
+    margin-top: var(--space-4);
+    font-weight: var(--font-medium);
+    color: var(--primary-color);
+  }
+}
+
+.or-divider {
+  text-align: center;
+  margin: var(--space-4) 0;
+  position: relative;
+  color: var(--text-light);
+
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background-color: var(--border-color);
+  }
+
+  &::before {
+    left: 0;
+  }
+
+  &::after {
+    right: 0;
+  }
+}
+
+.format-help {
+  margin-bottom: var(--space-4);
+
+  summary {
+    cursor: pointer;
+    color: var(--primary-color);
+    font-weight: var(--font-medium);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  pre {
+    margin-top: var(--space-4);
+  }
+}
+
+.audio-option {
+  margin: var(--space-6) 0;
+  padding: var(--space-4);
+  background-color: var(--gray-50);
+  border-radius: var(--radius-lg);
+  border-left: 3px solid var(--secondary-color);
+}
+
+.checkbox-container {
+  @include flex(row, flex-start, center);
+  margin-bottom: var(--space-4);
+  cursor: pointer;
+
+  input[type="checkbox"] {
+    margin-right: var(--space-2);
+    width: auto;
+  }
+
+  .checkbox-label {
+    font-weight: var(--font-medium);
+    margin-bottom: 0;
+  }
+}
+
+.audio-files-section {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-color);
+}
+
+.audio-files-info {
+  margin-bottom: var(--space-4);
+}
+
+.audio-files-list {
+  margin: var(--space-2) 0;
+  padding-left: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--text-light);
+  list-style-type: disc;
+
+  li {
+    margin-bottom: var(--space-1);
+  }
+}
+
+.audio-note {
+  font-size: var(--text-xs);
+  color: var(--text-light);
+  font-style: italic;
+}
+
+.seek-slider {
+  flex: 1;
+  margin: 0 var(--space-2);
+  height: 4px;
+}

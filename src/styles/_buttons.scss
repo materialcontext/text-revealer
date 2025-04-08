@@ -1,0 +1,301 @@
+/*
+ * Button styles
+ */
+
+// Base button
+button, .button {
+  @include button-base;
+}
+
+// Primary button
+.btn-primary {
+  @include button-primary;
+}
+
+// Secondary button
+.btn-secondary {
+  @include button-secondary;
+}
+
+// Ghost button
+.btn-ghost {
+  @include button-ghost;
+}
+
+// Danger button
+.btn-danger {
+  @include button-danger;
+}
+
+// Success button
+.btn-success {
+  @include button-base;
+  background-color: var(--success-color);
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: darken(#00c389, 10%);
+  }
+}
+
+// Warning button
+.btn-warning {
+  @include button-base;
+  background-color: var(--warning-color);
+  color: var(--gray-800);
+
+  &:hover:not(:disabled) {
+    background-color: darken(#ffc555, 10%);
+  }
+}
+
+// Info button
+.btn-info {
+  @include button-base;
+  background-color: var(--info-color);
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: var(--primary-dark);
+  }
+}
+
+// Light button
+.btn-light {
+  @include button-base;
+  background-color: var(--gray-100);
+  color: var(--text-color);
+
+  &:hover:not(:disabled) {
+    background-color: var(--gray-200);
+  }
+}
+
+// Dark button
+.btn-dark {
+  @include button-base;
+  background-color: var(--gray-800);
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: var(--gray-700);
+  }
+}
+
+// Button sizes
+.btn-xs {
+  font-size: var(--text-xs);
+  padding: var(--space-1) var(--space-2);
+}
+
+.btn-sm {
+  font-size: var(--text-sm);
+  padding: var(--space-1) var(--space-3);
+}
+
+.btn-md {
+  font-size: var(--text-base);
+  padding: var(--space-2) var(--space-4);
+}
+
+.btn-lg {
+  font-size: var(--text-md);
+  padding: var(--space-3) var(--space-6);
+}
+
+.btn-xl {
+  font-size: var(--text-lg);
+  padding: var(--space-4) var(--space-8);
+}
+
+// Button with icon
+.btn-icon {
+  @include flex(row, center, center);
+  gap: var(--space-2);
+
+  svg, img, i {
+    width: 1em;
+    height: 1em;
+  }
+}
+
+// Icon-only button
+.btn-icon-only {
+  @include flex(row, center, center);
+  width: 2.5em;
+  height: 2.5em;
+  padding: 0;
+
+  svg, img, i {
+    width: 1.2em;
+    height: 1.2em;
+  }
+}
+
+// Button group
+.btn-group {
+  @include flex(row, flex-start, center);
+
+  button, .button {
+    border-radius: 0;
+
+    &:first-child {
+      border-top-left-radius: var(--radius-md);
+      border-bottom-left-radius: var(--radius-md);
+    }
+
+    &:last-child {
+      border-top-right-radius: var(--radius-md);
+      border-bottom-right-radius: var(--radius-md);
+    }
+  }
+}
+
+// Full-width button
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+// Link button
+.btn-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--primary-color);
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: var(--font-normal);
+
+  &:hover {
+    color: var(--primary-dark);
+  }
+}
+
+// Loading state
+.btn-loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    top: calc(50% - 0.5em);
+    left: calc(50% - 0.5em);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.6s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// Specific application buttons
+.nav-button {
+  @include button-primary;
+  min-width: 80px;
+
+  &.prev {
+    background-color: var(--secondary-color);
+
+    &:hover:not(:disabled) {
+      background-color: var(--secondary-dark);
+    }
+  }
+
+  &.next {
+    background-color: var(--primary-color);
+
+    &:hover:not(:disabled) {
+      background-color: var(--primary-dark);
+    }
+  }
+
+  &.hidden, &:disabled {
+    visibility: hidden;
+  }
+}
+
+.exit-button {
+  @include button-ghost;
+  color: var(--text-light);
+
+  &:hover {
+    color: var(--text-color);
+  }
+}
+
+.clear-button {
+  @include button-danger;
+  font-size: var(--text-sm);
+}
+
+.add-audio-button,
+.audio-select-button {
+  @include button-secondary;
+}
+
+.upload-button {
+  @include button-primary;
+  margin-bottom: var(--space-4);
+  align-self: flex-start;
+}
+
+.dismiss-button {
+  @include button-ghost;
+  margin-top: var(--space-4);
+  align-self: flex-end;
+}
+
+.submit-button {
+  @include button-primary;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-md);
+  width: 100%;
+}
+
+.continue-button {
+  @include button-success;
+}
+
+.demo-button {
+  @include button-primary;
+}
+
+.replace-audio-button {
+  @include button-ghost;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.play-button {
+  @include button-primary;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  @include flex(row, center, center);
+
+  &.pause {
+    font-size: 12px;
+    letter-spacing: -1px;
+  }
+}
+
+.open-button {
+  @include button-primary;
+}
+
+.export-button {
+  @include button-secondary;
+}
+
+.delete-button {
+  @include button-danger;
+}

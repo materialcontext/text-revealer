@@ -1,0 +1,125 @@
+/*
+ * Variables and Design Tokens
+ */
+
+// Color Palette - Modern, accessible colors inspired by Wise/Intuit
+:root {
+  // Primary colors
+  --primary-color: #00b9ff; // Primary blue - bright, engaging
+  --primary-dark: #0095cc; // Darker blue for hover states
+  --primary-light: #e6f7ff; // Light blue for backgrounds
+
+  // Secondary colors
+  --secondary-color: #6b47ed; // Purple for secondary actions
+  --secondary-dark: #5636cb; // Darker purple for hover
+  --secondary-light: #f0ebff; // Light purple for backgrounds
+
+  // Accent colors
+  --accent-color: #00d6b5; // Teal for accents and success states
+  --accent-dark: #00b396; // Darker teal for hover
+  --accent-light: #e6fff9; // Light teal for backgrounds
+
+  // Neutral colors
+  --gray-50: #f7fafc;  // Lightest gray for backgrounds
+  --gray-100: #edf2f7; // Light gray for alternate backgrounds
+  --gray-200: #e2e8f0; // Medium light gray for borders
+  --gray-300: #cbd5e0; // Medium gray for disabled elements
+  --gray-400: #a0aec0; // Medium dark gray for icons
+  --gray-500: #718096; // Dark gray for secondary text
+  --gray-600: #4a5568; // Darker gray for primary text
+  --gray-700: #2d3748; // Very dark gray for headings
+  --gray-800: #1a202c; // Nearly black for emphasized text
+
+  // Functional colors
+  --success-color: #00c389; // Green for success
+  --warning-color: #ffc555; // Amber for warnings
+  --error-color: #ff4d6a;   // Red for errors
+  --info-color: #00b9ff;    // Blue for information
+
+  // Text colors
+  --text-color: var(--gray-700);
+  --text-light: var(--gray-500);
+  --text-dark: var(--gray-800);
+  --text-inverted: white;
+
+  // Background colors
+  --background-color: white;
+  --background-alt: var(--gray-50);
+  --background-elevated: white;
+
+  // UI Element colors
+  --border-color: var(--gray-200);
+  --border-color-dark: var(--gray-300);
+  --blank-color: var(--gray-100);
+  --revealed-color: var(--primary-light);
+
+  // Shadow styles
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.03);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  // Typography
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-family-mono: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  // Font sizes
+  --text-xs: 0.75rem;   // 12px
+  --text-sm: 0.875rem;  // 14px
+  --text-base: 1rem;    // 16px
+  --text-md: 1.125rem;  // 18px
+  --text-lg: 1.25rem;   // 20px
+  --text-xl: 1.5rem;    // 24px
+  --text-2xl: 1.875rem; // 30px
+  --text-3xl: 2.25rem;  // 36px
+
+  // Font weights
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  // Line heights
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+
+  // Spacing scale
+  --space-1: 0.25rem;  // 4px
+  --space-2: 0.5rem;   // 8px
+  --space-3: 0.75rem;  // 12px
+  --space-4: 1rem;     // 16px
+  --space-5: 1.25rem;  // 20px
+  --space-6: 1.5rem;   // 24px
+  --space-8: 2rem;     // 32px
+  --space-10: 2.5rem;  // 40px
+  --space-12: 3rem;    // 48px
+  --space-16: 4rem;    // 64px
+
+  // Border radius
+  --radius-sm: 0.125rem; // 2px
+  --radius-md: 0.25rem;  // 4px
+  --radius-lg: 0.5rem;   // 8px
+  --radius-xl: 0.75rem;  // 12px
+  --radius-full: 9999px;
+
+  // Transitions
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Z-index scale
+  --z-0: 0;
+  --z-10: 10;
+  --z-20: 20;
+  --z-30: 30;
+  --z-40: 40;
+  --z-50: 50;
+  --z-auto: auto;
+
+  // Layout
+  --container-width: 1200px;
+  --header-height: 4rem;
+  --footer-height: 3rem;
+}

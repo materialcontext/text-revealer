@@ -1,0 +1,35 @@
+/*
+ * Text Reveal App - Main Stylesheet
+ * A modern, modular SCSS structure for better maintainability
+ */
+
+// Import variables and design tokens first
+@import 'variables';
+@import 'mixins';
+
+// Base styles
+@import 'reset';
+@import 'typography';
+
+// Layout components
+@import 'layout';
+@import 'navigation';
+@import 'footer';
+
+// UI Components
+@import 'buttons';
+@import 'forms';
+@import 'cards';
+@import 'messages';
+
+// Feature components
+@import 'audio-player';
+@import 'file-loader';
+@import 'reader';
+@import 'browse';
+
+// Utilities and helpers
+@import 'utilities';
+
+// Media queries should be imported last
+@import 'media-queries';

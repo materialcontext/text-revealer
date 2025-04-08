@@ -1,0 +1,74 @@
+/*
+ * Footer styles
+ */
+
+// Main footer
+footer {
+  background-color: var(--gray-50);
+  border-top: 1px solid var(--border-color);
+  padding: var(--space-6) 0;
+  margin-top: var(--space-8);
+}
+
+.footer-content {
+  @include container;
+  @include flex(row, space-between, center);
+
+  @include mobile-only {
+    flex-direction: column;
+    gap: var(--space-4);
+    text-align: center;
+  }
+}
+
+// Subtle footer (minimal style)
+.subtle-footer {
+  padding: var(--space-4) 0;
+  text-align: center;
+  border-top: 1px solid var(--border-color);
+  margin-top: var(--space-8);
+  font-size: var(--text-sm);
+  color: var(--text-light);
+}
+
+// Footer columns
+.footer-column {
+  @include flex(column, flex-start, flex-start);
+  gap: var(--space-2);
+
+  h4 {
+    font-size: var(--text-base);
+    margin-bottom: var(--space-3);
+    color: var(--text-dark);
+  }
+
+  a {
+    color: var(--text-light);
+    transition: color var(--transition-fast);
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+}
+
+// Footer navigation
+.footer-nav {
+  @include flex(row, center, center);
+  gap: var(--space-4);
+
+  a {
+    color: var(--text-light);
+    transition: color var(--transition-fast);
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+}
+
+// Copyright text
+.copyright {
+  color: var(--text-light);
+  font-size: var(--text-sm);
+}

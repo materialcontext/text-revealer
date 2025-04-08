@@ -1,0 +1,189 @@
+/*
+ * SCSS Mixins for common patterns
+ */
+
+// Flexbox layouts
+@mixin flex($direction: row, $justify: flex-start, $align: stretch, $wrap: nowrap) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  flex-wrap: $wrap;
+}
+
+// Grid layouts
+@mixin grid($columns: 1fr, $gap: var(--space-4)) {
+  display: grid;
+  grid-template-columns: $columns;
+  gap: $gap;
+}
+
+// Responsive containers
+@mixin container($max-width: var(--container-width), $padding: var(--space-4)) {
+  width: 100%;
+  max-width: $max-width;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $padding;
+  padding-right: $padding;
+}
+
+// Card styles
+@mixin card($padding: var(--space-6), $bg: var(--background-elevated), $shadow: var(--shadow-md)) {
+  background-color: $bg;
+  border-radius: var(--radius-lg);
+  box-shadow: $shadow;
+  padding: $padding;
+}
+
+// Button styles
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-medium);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+@mixin button-primary {
+  @include button-base;
+  background-color: var(--primary-color);
+  color: var(--text-inverted);
+
+  &:hover:not(:disabled) {
+    background-color: var(--primary-dark);
+  }
+}
+
+@mixin button-secondary {
+  @include button-base;
+  background-color: var(--secondary-color);
+  color: var(--text-inverted);
+
+  &:hover:not(:disabled) {
+    background-color: var(--secondary-dark);
+  }
+}
+
+@mixin button-ghost {
+  @include button-base;
+  background-color: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+
+  &:hover:not(:disabled) {
+    background-color: var(--gray-50);
+    border-color: var(--border-color-dark);
+  }
+}
+
+@mixin button-danger {
+  @include button-base;
+  background-color: var(--error-color);
+  color: var(--text-inverted);
+
+  &:hover:not(:disabled) {
+    background-color: darken(#ff4d6a, 10%);
+  }
+}
+
+// Form input styles
+@mixin input-base {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text-color);
+  background-color: var(--background-color);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-light);
+  }
+
+  &::placeholder {
+    color: var(--text-light);
+  }
+
+  &:disabled {
+    background-color: var(--gray-100);
+    cursor: not-allowed;
+  }
+}
+
+// Responsive breakpoints
+@mixin mobile-only {
+  @media (max-width: 639px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: 640px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin large-desktop {
+  @media (min-width: 1280px) {
+    @content;
+  }
+}
+
+// Typography helpers
+@mixin heading($size: var(--text-xl)) {
+  font-size: $size;
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-tight);
+  color: var(--text-dark);
+  margin-bottom: var(--space-4);
+}
+
+// Truncate text with ellipsis
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Focus styles for accessibility
+@mixin focus-ring {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+// Elevated container style (card-like appearance)
+@mixin elevated {
+  background-color: var(--background-elevated);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+// Status message styling
+@mixin status-message($bg, $border, $text) {
+  padding: var(--space-3) var(--space-4);
+  background-color: $bg;
+  border-left: 3px solid $border;
+  border-radius: var(--radius-md);
+  color: $text;
+}

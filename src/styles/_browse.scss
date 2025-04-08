@@ -1,0 +1,170 @@
+/*
+ * Browse page styles
+ */
+
+// Browse container
+.browse-container {
+  padding-top: var(--space-8);
+
+  h1 {
+    margin-bottom: var(--space-6);
+    color: var(--text-dark);
+  }
+}
+
+// Browse actions
+.browse-actions {
+  margin-bottom: var(--space-6);
+  text-align: right;
+
+  .clear-button {
+    @include button-danger;
+  }
+}
+
+// File browser
+.file-browser {
+  min-height: 200px;
+
+  > p {
+    text-align: center;
+    color: var(--text-light);
+    padding: var(--space-8) 0;
+
+    a {
+      font-weight: var(--font-medium);
+    }
+  }
+}
+
+// File grid
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+
+  @include mobile-only {
+    grid-template-columns: 1fr;
+  }
+}
+
+// File card
+.file-card {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all var(--transition-fast);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+  }
+}
+
+// File card header
+.file-card-header {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--border-color);
+
+  h3 {
+    margin-bottom: var(--space-2);
+    font-size: var(--text-lg);
+    color: var(--text-dark);
+    @include truncate;
+  }
+}
+
+// File date
+.file-date {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--text-light);
+}
+
+// File card body
+.file-card-body {
+  padding: var(--space-4);
+  flex: 1;
+}
+
+// File stats
+.file-stats {
+  display: flex;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-light);
+
+  span {
+    display: inline-flex;
+    align-items: center;
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      margin-right: var(--space-2);
+    }
+
+    &:nth-child(2)::before {
+      background-color: var(--secondary-color);
+    }
+  }
+}
+
+// File card actions
+.file-card-actions {
+  display: flex;
+  gap: var(--space-2);
+  background-color: var(--gray-50);
+  padding: var(--space-3);
+  border-top: 1px solid var(--border-color);
+
+  button {
+    flex: 1;
+    font-size: var(--text-sm);
+  }
+
+  .open-button {
+    @include button-primary;
+  }
+
+  .export-button {
+    @include button-secondary;
+  }
+
+  .delete-button {
+    @include button-danger;
+  }
+}
+
+// Empty state
+.empty-state {
+  text-align: center;
+  padding: var(--space-8) 0;
+
+  .empty-icon {
+    font-size: var(--text-3xl);
+    color: var(--gray-300);
+    margin-bottom: var(--space-4);
+  }
+
+  h3 {
+    color: var(--text-dark);
+    margin-bottom: var(--space-3);
+  }
+
+  p {
+    color: var(--text-light);
+    max-width: 500px;
+    margin: 0 auto var(--space-6);
+  }
+}

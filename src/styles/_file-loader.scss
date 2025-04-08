@@ -1,0 +1,313 @@
+/*
+ * File loader styles
+ */
+
+// File loader section
+.file-loader-section {
+  margin-bottom: var(--space-8);
+}
+
+// Combined loader and history layout
+.file-loader-with-history {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  align-items: start;
+
+  @include desktop {
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+// File loader container
+.file-loader {
+  padding: var(--space-4);
+  background-color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+
+  h2 {
+    margin: 0 0 var(--space-4) 0;
+    font-size: var(--text-xl);
+    color: var(--text-dark);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  form {
+    @include flex(column, flex-start, stretch);
+  }
+}
+
+// Drop area for files
+.drop-area {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  text-align: center;
+  margin-bottom: var(--space-4);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background-color: var(--gray-50);
+
+  &:hover {
+    border-color: var(--primary-color);
+    background-color: var(--primary-light);
+  }
+
+  .filename {
+    margin-top: var(--space-4);
+    font-weight: var(--font-medium);
+    color: var(--primary-color);
+  }
+}
+
+// Or divider
+.or-divider {
+  text-align: center;
+  margin: var(--space-4) 0;
+  position: relative;
+  color: var(--text-light);
+
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background-color: var(--border-color);
+  }
+
+  &::before {
+    left: 0;
+  }
+
+  &::after {
+    right: 0;
+  }
+}
+
+// Text area for direct input
+textarea {
+  min-height: 150px;
+  margin-bottom: var(--space-4);
+  font-family: var(--font-family-mono);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+// Format help section
+.format-help {
+  margin-bottom: var(--space-4);
+
+  summary {
+    cursor: pointer;
+    color: var(--primary-color);
+    font-weight: var(--font-medium);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  pre {
+    margin-top: var(--space-4);
+  }
+}
+
+// Audio options
+.audio-option {
+  margin: var(--space-6) 0;
+  padding: var(--space-4);
+  background-color: var(--gray-50);
+  border-radius: var(--radius-lg);
+  border-left: 3px solid var(--secondary-color);
+}
+
+// Checkbox container
+.checkbox-container {
+  @include flex(row, flex-start, center);
+  margin-bottom: var(--space-4);
+  cursor: pointer;
+
+  input[type="checkbox"] {
+    margin-right: var(--space-2);
+    width: auto;
+  }
+
+  .checkbox-label {
+    font-weight: var(--font-medium);
+    margin-bottom: 0;
+  }
+}
+
+// Audio files section
+.audio-files-section {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-color);
+}
+
+// Audio select button
+.audio-select-button {
+  @include button-secondary;
+  margin-bottom: var(--space-4);
+}
+
+// Audio files info
+.audio-files-info {
+  margin-bottom: var(--space-4);
+
+  p {
+    margin-bottom: var(--space-2);
+    font-weight: var(--font-medium);
+  }
+}
+
+// Audio files list
+.audio-files-list {
+  margin: var(--space-2) 0;
+  padding-left: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--text-light);
+  list-style-type: disc;
+
+  li {
+    margin-bottom: var(--space-1);
+  }
+}
+
+// Audio note
+.audio-note {
+  font-size: var(--text-xs);
+  color: var(--text-light);
+  font-style: italic;
+  margin-top: var(--space-2);
+}
+
+// Submit button
+.submit-button {
+  @include button-primary;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-md);
+  width: 100%;
+}
+
+// Compact file history
+.compact-file-history {
+  padding: var(--space-4);
+  background-color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  h2 {
+    margin: 0 0 var(--space-4) 0;
+    font-size: var(--text-xl);
+    color: var(--text-dark);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--border-color);
+  }
+}
+
+// Compact file list
+.compact-file-list {
+  flex: 1;
+  overflow-y: auto;
+  @include flex(column, flex-start, stretch);
+  gap: var(--space-2);
+}
+
+// Compact file item
+.compact-file-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+
+  &:hover {
+    background-color: var(--primary-light);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// File info
+.file-info {
+  flex: 1;
+  min-width: 0; // Allow text truncation
+}
+
+// File name
+.file-name {
+  font-weight: var(--font-medium);
+  margin-bottom: var(--space-1);
+  @include truncate;
+}
+
+// File metadata
+.file-meta {
+  display: flex;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--text-light);
+}
+
+// Compact actions
+.compact-actions {
+  display: flex;
+  gap: var(--space-2);
+
+  button {
+    font-size: var(--text-sm);
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .delete-button {
+    background-color: var(--error-color);
+    font-size: var(--text-base);
+    padding: 0 var(--space-2);
+
+    &:hover {
+      background-color: darken(#ff4d6a, 10%);
+    }
+  }
+}
+
+// Compact mode for file loader
+.file-loader-compact {
+  .drop-area {
+    padding: var(--space-4);
+  }
+
+  textarea {
+    min-height: 100px;
+  }
+}
+
+// File loader for small screens
+@include mobile-only {
+  .file-loader,
+  .compact-file-history {
+    padding: var(--space-3);
+  }
+
+  .drop-area {
+    padding: var(--space-4);
+  }
+
+  .file-meta {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+}

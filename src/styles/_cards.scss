@@ -1,0 +1,232 @@
+/*
+ * Card styles
+ */
+
+// Base card
+.card {
+  background-color: var(--background-elevated);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+// Card with border
+.card-bordered {
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+  }
+}
+
+// Card sections
+.card-header {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--border-color);
+
+  h2, h3, h4 {
+    margin-bottom: 0;
+    color: var(--text-color);
+  }
+}
+
+.card-body {
+  padding: var(--space-4);
+  flex: 1;
+}
+
+.card-footer {
+  padding: var(--space-4);
+  border-top: 1px solid var(--border-color);
+  background-color: var(--gray-50);
+}
+
+// File card for the browser
+.file-card {
+  @extend .card;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  border: 1px solid transparent;
+
+  &:hover {
+    border-color: var(--primary-color);
+  }
+}
+
+.file-card-header {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--border-color);
+
+  h3 {
+    margin-bottom: var(--space-1);
+    font-size: var(--text-lg);
+    color: var(--text-dark);
+  }
+}
+
+.file-date {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--text-light);
+}
+
+.file-card-body {
+  padding: var(--space-4);
+  flex: 1;
+}
+
+.file-stats {
+  display: flex;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-light);
+}
+
+.file-card-actions {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--gray-50);
+  border-top: 1px solid var(--border-color);
+
+  button {
+    flex: 1;
+  }
+}
+
+// Recent items card
+.compact-file-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  border-radius: var(--radius-md);
+
+  &:hover {
+    background-color: var(--primary-light);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.file-info {
+  flex: 1;
+  min-width: 0; // Allow text truncation
+}
+
+.file-name {
+  font-weight: var(--font-medium);
+  margin-bottom: var(--space-1);
+  @include truncate;
+}
+
+.file-meta {
+  display: flex;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--text-light);
+}
+
+.compact-actions {
+  display: flex;
+  gap: var(--space-2);
+
+  button {
+    font-size: var(--text-sm);
+    padding: var(--space-1) var(--space-2);
+  }
+}
+
+// Information card
+.info-card {
+  @extend .card;
+  padding: var(--space-4);
+  background-color: var(--primary-light);
+  border-left: 3px solid var(--primary-color);
+
+  h3 {
+    color: var(--primary-dark);
+    margin-bottom: var(--space-2);
+  }
+
+  p {
+    color: var(--text-color);
+  }
+}
+
+// Instruction card
+.instruction-item {
+  @extend .card;
+  padding: var(--space-4);
+  background-color: var(--gray-50);
+  border-left: 3px solid var(--primary-color);
+  transition: transform var(--transition-fast);
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  h3 {
+    color: var(--primary-dark);
+    margin-bottom: var(--space-2);
+    font-size: var(--text-md);
+  }
+
+  p {
+    color: var(--text-color);
+    font-size: var(--text-sm);
+    margin: 0;
+  }
+}
+
+// Media card
+.media-card {
+  @extend .card;
+  overflow: hidden;
+
+  .media {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .media-content {
+    padding: var(--space-4);
+  }
+
+  h3 {
+    margin-bottom: var(--space-2);
+  }
+}
+
+// Dashboard card
+.dashboard-card {
+  @extend .card;
+  padding: var(--space-4);
+
+  .value {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--primary-color);
+    margin-bottom: var(--space-2);
+  }
+
+  .label {
+    font-size: var(--text-sm);
+    color: var(--text-light);
+    @include truncate;
+  }
+}

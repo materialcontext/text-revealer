@@ -1,0 +1,232 @@
+/*
+ * Media queries
+ */
+
+// This file contains additional responsive adjustments
+// that are not already handled by the mixins in individual files
+
+// Mobile devices
+@include mobile-only {
+  .hide-on-mobile {
+    display: none !important;
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+  }
+
+  .container {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  .main-nav {
+    .nav-container {
+      flex-direction: column;
+      padding: var(--space-3) var(--space-4);
+    }
+
+    .nav-links {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .instruction-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Tablet devices
+@include tablet {
+  .hide-on-tablet {
+    display: none !important;
+  }
+
+  .show-on-tablet {
+    display: block !important;
+  }
+
+  .grid-cols-tablet-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+// Desktop devices
+@include desktop {
+  .hide-on-desktop {
+    display: none !important;
+  }
+
+  .show-on-desktop {
+    display: block !important;
+  }
+
+  .two-column-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space-6);
+  }
+
+  .grid-cols-desktop-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid-cols-desktop-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+// Extra large displays
+@include large-desktop {
+  .container {
+    max-width: var(--container-width);
+  }
+
+  .grid-cols-xl-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+// Print styles
+@media print {
+  body {
+    background: white;
+    color: black;
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 90%;
+    color: #333;
+  }
+
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "";
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+
+  .reader-container {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  .blank, .revealed {
+    border: 1px solid black;
+    color: black !important;
+    background: white;
+  }
+}
+
+// High-contrast mode (for accessibility)
+@media (prefers-contrast: high) {
+  :root {
+    --primary-color: #0052cc;
+    --primary-dark: #003d99;
+    --primary-light: #d9e9ff;
+    --secondary-color: #5f25b8;
+    --secondary-dark: #40178a;
+    --text-color: #000;
+    --text-light: #333;
+    --border-color: #000;
+  }
+
+  button, .button, .btn-primary, .btn-secondary {
+    border: 1px solid black;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  .blank {
+    border: 2px dashed black;
+  }
+
+  .revealed {
+    border: 2px solid black;
+  }
+
+  .card, .file-card {
+    border: 1px solid black;
+    box-shadow: none;
+  }
+}
+
+// Reduced motion preferences
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .card:hover, .file-card:hover {
+    transform: none !important;
+  }
+
+  .blank:hover {
+    transform: none !important;
+  }
+}
+
+// Dark mode (if needed in the future)
+// Commented out since we're not implementing dark mode yet
+/*
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #121212;
+    --background-elevated: #1e1e1e;
+    --text-color: #e0e0e0;
+    --text-light: #a0a0a0;
+    --text-dark: #ffffff;
+    --border-color: #333;
+    --gray-50: #1e1e1e;
+    --gray-100: #2a2a2a;
+    --gray-200: #333;
+    --gray-300: #444;
+    --gray-400: #555;
+    --gray-500: #777;
+    --gray-600: #999;
+    --gray-700: #bbb;
+    --gray-800: #ddd;
+  }
+
+  // Override elements for dark mode
+  // ...
+}
+*/
