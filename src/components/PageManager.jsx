@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import RevealableSection from './RevealableSection';
 import ControlBar from './ControlBar';
+import KeyboardHelp from './KeyboardHelp';
 import { parseText, parseJson, prepareForReader } from '../lib/parser';
-import { getAudioForPage } from '../lib/storage';
+import { getAudioForPage } from '../lib/AudioStorageService';
 
 const normalizeToPages = (input) => {
     if (Array.isArray(input)) {
@@ -28,39 +29,154 @@ const PageManager = ({ file: fileProp }) => {
     const [file, setFile] = useState(fileProp || null);
     const [fileId, setFileId] = useState(null);
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
-    // Track a single array of revealed blanks for the entire page
     const [pageRevealStates, setPageRevealStates] = useState({});
     const [audioSrc, setAudioSrc] = useState(null);
-
-    // Removed showAudioUploader state - no longer needed with new UI flow
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const containerRef = useRef(null);
 
     // Load from localStorage on mount if no file prop was passed
     useEffect(() => {
-        if (fileProp) return;
+        if (fileProp) {
+            setFile(fileProp);
+            setLoading(false);
+            return;
+        }
 
         try {
             const currentId = localStorage.getItem('text-reveal-current');
             const filesJSON = localStorage.getItem('text-reveal-files');
-            if (!currentId || !filesJSON) return;
+            if (!currentId || !filesJSON) {
+                setLoading(false);
+                setError('No file selected. Please go back to the home page and select a file.');
+                return;
+            }
 
             const files = JSON.parse(filesJSON);
             const loadedFile = files[currentId];
             if (loadedFile) {
                 setFile(loadedFile);
                 setFileId(currentId);
+            } else {
+                setError('File not found. It may have been deleted.');
             }
         } catch (err) {
             console.error('Error loading file from localStorage:', err);
+            setError('Error loading file. Please try again.');
+        } finally {
+            setLoading(false);
         }
     }, [fileProp]);
 
     // Load audio for current page when page changes
     useEffect(() => {
-        if (fileId) {
-            const audio = getAudioForPage(fileId, currentPageIndex);
-            setAudioSrc(audio);
-        }
+        const loadAudio = async () => {
+            if (fileId) {
+                try {
+                    // Use the IndexedDB implementation
+                    const audio = await getAudioForPage(fileId, currentPageIndex);
+                    setAudioSrc(audio);
+                } catch (error) {
+                    console.error('Error loading audio:', error);
+                    setAudioSrc(null);
+                }
+            }
+        };
+
+        loadAudio();
     }, [fileId, currentPageIndex]);
+
+    // Setup keyboard navigation
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (!file || !file.content) return;
+
+            const pages = normalizeToPages(file.content);
+            const processedPages = prepareForReader(pages);
+
+            // Handle key presses
+            switch (e.key) {
+                case 'ArrowRight':
+                    // Find the next blank to reveal
+                    handleRevealNextBlank(processedPages);
+                    break;
+                case 'ArrowLeft':
+                    // Hide the last revealed blank
+                    handleHideLastBlank();
+                    break;
+                case 'ArrowDown':
+                    // Go to next page
+                    if (currentPageIndex < processedPages.length - 1) {
+                        setCurrentPageIndex(currentPageIndex + 1);
+                    }
+                    break;
+                case 'ArrowUp':
+                    // Go to previous page
+                    if (currentPageIndex > 0) {
+                        setCurrentPageIndex(currentPageIndex - 1);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        };
+
+        // Add keyboard event listener
+        window.addEventListener('keydown', handleKeyDown);
+
+        // Clean up event listener on unmount
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [file, currentPageIndex, pageRevealStates]);
+
+    // Handle revealing the next blank on the page
+    const handleRevealNextBlank = (pages) => {
+        if (!pages || !pages.length) return;
+
+        const currentPage = pages[currentPageIndex];
+        let totalBlanksOnPage = 0;
+
+        // Count total blanks on the current page
+        currentPage.sections.forEach(section => {
+            if (section.blanks) {
+                totalBlanksOnPage += section.blanks.length;
+            }
+        });
+
+        // Get current revealed blanks for this page
+        const currentPageState = pageRevealStates[currentPageIndex] || { revealedBlanks: [] };
+        const currentRevealedBlanks = currentPageState.revealedBlanks || [];
+
+        // If all blanks are already revealed, do nothing
+        if (currentRevealedBlanks.length >= totalBlanksOnPage) return;
+
+        // Reveal the next blank
+        const newRevealedBlanks = [...currentRevealedBlanks];
+        newRevealedBlanks.push(currentRevealedBlanks.length);
+
+        setPageRevealStates(prevState => ({
+            ...prevState,
+            [currentPageIndex]: { revealedBlanks: newRevealedBlanks }
+        }));
+    };
+
+    // Handle hiding the last revealed blank on the page
+    const handleHideLastBlank = () => {
+        const currentPageState = pageRevealStates[currentPageIndex];
+
+        if (!currentPageState || !currentPageState.revealedBlanks || currentPageState.revealedBlanks.length === 0) {
+            return;
+        }
+
+        const newRevealedBlanks = [...currentPageState.revealedBlanks];
+        newRevealedBlanks.pop();
+
+        setPageRevealStates(prevState => ({
+            ...prevState,
+            [currentPageIndex]: { revealedBlanks: newRevealedBlanks }
+        }));
+    };
 
     // Handler for blank clicks - working across sections
     const handleBlankClick = (sectionIndex, blankIndex, pages) => {
@@ -164,10 +280,37 @@ const PageManager = ({ file: fileProp }) => {
         window.location.href = '/';
     };
 
-    // Removed AudioUploader handling methods since we're handling audio upload on the home page now
+    if (loading) {
+        return (
+            <div className="reader-loading">
+                <div className="loader"></div>
+                <p>Loading content...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="reader-error">
+                <h2>Error</h2>
+                <p>{error}</p>
+                <button className="btn-primary" onClick={() => window.location.href = '/'}>
+                    Go to Home
+                </button>
+            </div>
+        );
+    }
 
     if (!file?.content) {
-        return <div className="container">No file loaded.</div>;
+        return (
+            <div className="reader-error">
+                <h2>No Content</h2>
+                <p>No file loaded. Please go back to the home page and select a file.</p>
+                <button className="btn-primary" onClick={() => window.location.href = '/'}>
+                    Go to Home
+                </button>
+            </div>
+        );
     }
 
     const rawPages = normalizeToPages(file.content);
@@ -177,7 +320,11 @@ const PageManager = ({ file: fileProp }) => {
     return (
         <div className="container">
             <div className="reader-wrapper">
-                <div className="reader-container">
+                <div
+                    className="reader-container"
+                    ref={containerRef}
+                    tabIndex="0" // Make container focusable for keyboard navigation
+                >
                     <h2>{currentPage.title}</h2>
 
                     <div className='reader-content'>
@@ -202,8 +349,9 @@ const PageManager = ({ file: fileProp }) => {
                     />
                 </div>
             </div>
+            <KeyboardHelp />
         </div>
     );
-}
+};
 
 export default PageManager;

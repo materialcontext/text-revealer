@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AudioPlayer from './AudioPlayer';
-import { saveAudioFile, getAudioForPage } from '../lib/storage';
+import { saveAudioFile, getAudioForPage } from '../lib/AudioStorageService';
 
 /**
  * Control bar component for reader navigation and audio controls
@@ -40,9 +40,10 @@ const ControlBar = ({
       // Save the current page to avoid navigation reset
       const savedPage = currentPageSaved;
 
+      // Use the IndexedDB implementation
       await saveAudioFile(fileId, savedPage, file);
 
-      // Use a more targeted approach than full page reload
+      // Get the updated audio source
       const newAudioSrc = await getAudioForPage(fileId, savedPage);
 
       // Force refresh the audio player without page reload

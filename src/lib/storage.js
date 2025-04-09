@@ -1,13 +1,14 @@
 /**
  * Storage utilities for managing content in local storage
  */
+import * as AudioStorage from './AudioStorageService';
 
 // Storage keys
 const STORAGE_KEYS = {
   CURRENT_FILE: 'text-reveal-current',
   HISTORY: 'text-reveal-history',
-  FILES: 'text-reveal-files',
-  AUDIO: 'text-reveal-audio'
+  FILES: 'text-reveal-files'
+  // Removed AUDIO key since we're using IndexedDB now
 };
 
 // Maximum number of files to keep in history
@@ -152,7 +153,7 @@ export const getRecentFiles = () => {
  * @param {string} fileId - ID of the file to delete
  * @returns {boolean} Success indicator
  */
-export const deleteFile = (fileId) => {
+export const deleteFile = async (fileId) => {
   try {
     // Remove from files
     const files = getAllFiles();
@@ -178,8 +179,8 @@ export const deleteFile = (fileId) => {
       }
     }
 
-    // Remove any associated audio files
-    removeAudioForFile(fileId);
+    // Remove any associated audio files using IndexedDB
+    await AudioStorage.removeAudioForFile(fileId);
 
     return true;
   } catch (error) {
@@ -191,16 +192,22 @@ export const deleteFile = (fileId) => {
 /**
  * Clear all storage
  */
-export const clearAllStorage = () => {
+export const clearAllStorage = async () => {
   localStorage.removeItem(STORAGE_KEYS.FILES);
   localStorage.removeItem(STORAGE_KEYS.HISTORY);
   localStorage.removeItem(STORAGE_KEYS.CURRENT_FILE);
-  localStorage.removeItem(STORAGE_KEYS.AUDIO);
+
+  // Clear audio storage from IndexedDB
+  try {
+    await AudioStorage.clearAllAudio();
+  } catch (error) {
+    console.error('Error clearing audio storage:', error);
+  }
 };
 
 /**
  * ============================
- * Audio Storage Functions
+ * Audio Storage Functions - Using IndexedDB
  * ============================
  */
 
@@ -212,41 +219,13 @@ export const clearAllStorage = () => {
  * @returns {Promise<string>} URL for the saved audio
  */
 export const saveAudioFile = async (fileId, pageIndex, audioFile) => {
-  return new Promise((resolve, reject) => {
-    try {
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        try {
-          const audioData = event.target.result;
-          const audioMap = getAudioMap();
-
-          if (!audioMap[fileId]) {
-            audioMap[fileId] = {};
-          }
-
-          // Store as base64 data URI
-          audioMap[fileId][pageIndex] = audioData;
-
-          localStorage.setItem(STORAGE_KEYS.AUDIO, JSON.stringify(audioMap));
-          resolve(audioData);
-        } catch (error) {
-          console.error('Error saving audio data:', error);
-          reject(error);
-        }
-      };
-
-      reader.onerror = (error) => {
-        console.error('Error reading audio file:', error);
-        reject(error);
-      };
-
-      reader.readAsDataURL(audioFile);
-    } catch (error) {
-      console.error('Error in saveAudioFile:', error);
-      reject(error);
-    }
-  });
+  try {
+    await AudioStorage.saveAudio(fileId, pageIndex, audioFile);
+    return await AudioStorage.getAudio(fileId, pageIndex);
+  } catch (error) {
+    console.error('Error saving audio file:', error);
+    throw error;
+  }
 };
 
 /**
@@ -257,32 +236,7 @@ export const saveAudioFile = async (fileId, pageIndex, audioFile) => {
  */
 export const saveMultipleAudioFiles = async (fileId, audioFiles) => {
   try {
-    const audioMap = getAudioMap();
-
-    if (!audioMap[fileId]) {
-      audioMap[fileId] = {};
-    }
-
-    // Process each file
-    const savePromises = audioFiles.map((file, index) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-
-        reader.onload = (event) => {
-          audioMap[fileId][index] = event.target.result;
-          resolve();
-        };
-
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    });
-
-    await Promise.all(savePromises);
-
-    // Save the updated map
-    localStorage.setItem(STORAGE_KEYS.AUDIO, JSON.stringify(audioMap));
-    return true;
+    return await AudioStorage.saveMultipleAudio(fileId, audioFiles);
   } catch (error) {
     console.error('Error saving multiple audio files:', error);
     return false;
@@ -293,12 +247,11 @@ export const saveMultipleAudioFiles = async (fileId, audioFiles) => {
  * Get audio URL for a specific page
  * @param {string} fileId - ID of the text file
  * @param {number} pageIndex - Index of the page
- * @returns {string|null} URL for the audio, or null if not found
+ * @returns {Promise<string|null>} URL for the audio, or null if not found
  */
-export const getAudioForPage = (fileId, pageIndex) => {
+export const getAudioForPage = async (fileId, pageIndex) => {
   try {
-    const audioMap = getAudioMap();
-    return audioMap[fileId] && audioMap[fileId][pageIndex] ? audioMap[fileId][pageIndex] : null;
+    return await AudioStorage.getAudio(fileId, pageIndex);
   } catch (error) {
     console.error('Error getting audio for page:', error);
     return null;
@@ -308,18 +261,11 @@ export const getAudioForPage = (fileId, pageIndex) => {
 /**
  * Remove all audio files for a text file
  * @param {string} fileId - ID of the text file
- * @returns {boolean} Success indicator
+ * @returns {Promise<boolean>} Success indicator
  */
-export const removeAudioForFile = (fileId) => {
+export const removeAudioForFile = async (fileId) => {
   try {
-    const audioMap = getAudioMap();
-
-    if (audioMap[fileId]) {
-      delete audioMap[fileId];
-      localStorage.setItem(STORAGE_KEYS.AUDIO, JSON.stringify(audioMap));
-    }
-
-    return true;
+    return await AudioStorage.removeAudioForFile(fileId);
   } catch (error) {
     console.error('Error removing audio for file:', error);
     return false;
@@ -327,38 +273,14 @@ export const removeAudioForFile = (fileId) => {
 };
 
 /**
- * Get the complete audio map
- * @returns {object} Map of fileId to pageIndex to audio URL
- */
-export const getAudioMap = () => {
-  try {
-    const audioJson = localStorage.getItem(STORAGE_KEYS.AUDIO);
-    return audioJson ? JSON.parse(audioJson) : {};
-  } catch (error) {
-    console.error('Error getting audio map:', error);
-    return {};
-  }
-};
-
-/**
  * Check if a file has audio for all pages
  * @param {string} fileId - ID of the text file
  * @param {number} pageCount - Total number of pages
- * @returns {boolean} True if all pages have audio
+ * @returns {Promise<boolean>} True if all pages have audio
  */
-export const hasAudioForAllPages = (fileId, pageCount) => {
+export const hasAudioForAllPages = async (fileId, pageCount) => {
   try {
-    const audioMap = getAudioMap();
-
-    if (!audioMap[fileId]) return false;
-
-    for (let i = 0; i < pageCount; i++) {
-      if (!audioMap[fileId][i]) {
-        return false;
-      }
-    }
-
-    return true;
+    return await AudioStorage.hasAudioForAllPages(fileId, pageCount);
   } catch (error) {
     console.error('Error checking for complete audio:', error);
     return false;

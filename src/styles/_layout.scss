@@ -555,6 +555,13 @@
   @include card;
 }
 
+// slide nav bar layout
+.navigation-section {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
 // Two-column layout
 .two-column {
   @include grid(1fr, var(--space-6));

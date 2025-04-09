@@ -7,13 +7,13 @@ export default defineConfig({
   output: 'static',
   server: {
     port: 3000,
+    host: true, // Listen on all addresses, including LAN and public addresses
+    open: true, // Auto-open browser window
   },
-  // Explicitly enable SCSS processing
   vite: {
     css: {
       preprocessorOptions: {
         scss: {
-          // Optional: Add any global SCSS variables here
         }
       }
     }

@@ -10,13 +10,14 @@
 
 // Reader container
 .reader-container {
-  background-color: white;
+  background-color: var(--reader-background);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--card-shadow);
   padding: var(--space-6);
   margin-bottom: var(--space-8);
   position: relative;
   overflow: hidden;
+  border: 1px solid var(--border-color-light);
 
   h2 {
     text-align: center;
@@ -71,7 +72,7 @@
   border-radius: var(--radius-sm);
   cursor: pointer;
   color: transparent;
-  border: 1px dashed var(--gray-400);
+  border: 1px solid var(--gray-300);
   transition: all var(--transition-fast);
   position: relative;
 
@@ -88,6 +89,7 @@
   &:hover {
     background-color: var(--gray-200);
     transform: scale(1.05);
+    box-shadow: var(--shadow-sm);
   }
 }
 

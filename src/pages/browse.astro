@@ -17,6 +17,8 @@ import MainLayout from '../layouts/MainLayout.astro';
 </MainLayout>
 
 <script>
+  import { clearAllStorage } from '../lib/storage';
+
   document.addEventListener('DOMContentLoaded', () => {
     loadFiles();
 
@@ -24,15 +26,17 @@ import MainLayout from '../layouts/MainLayout.astro';
     document.getElementById('clear-data').addEventListener('click', clearAllData);
   });
 
-  function clearAllData() {
+  async function clearAllData() {
     if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
-      // Clear all storage
-      localStorage.removeItem('text-reveal-files');
-      localStorage.removeItem('text-reveal-history');
-      localStorage.removeItem('text-reveal-current');
-
-      // Reload the page
-      window.location.reload();
+      try {
+        // Clear all storage including IndexedDB
+        await clearAllStorage();
+        // Reload the page
+        window.location.reload();
+      } catch (error) {
+        console.error('Error clearing data:', error);
+        alert('There was an error clearing your data. Please try again.');
+      }
     }
   }
 
@@ -152,39 +156,19 @@ import MainLayout from '../layouts/MainLayout.astro';
     window.location.href = '/reader';
   }
 
-  function deleteFile(fileId) {
+  async function deleteFile(fileId) {
     if (confirm('Are you sure you want to delete this file?')) {
-      // Get all files
-      const filesJson = localStorage.getItem('text-reveal-files');
-      const files = filesJson ? JSON.parse(filesJson) : {};
+      try {
+        // Import and use deleteFile function from storage
+        const { deleteFile: removeFile } = await import('../lib/storage');
+        await removeFile(fileId);
 
-      // Delete the file
-      if (files[fileId]) {
-        delete files[fileId];
-        localStorage.setItem('text-reveal-files', JSON.stringify(files));
+        // Reload the files list
+        loadFiles();
+      } catch (error) {
+        console.error('Error deleting file:', error);
+        alert('There was an error deleting the file. Please try again.');
       }
-
-      // Update history
-      const historyJson = localStorage.getItem('text-reveal-history');
-      const history = historyJson ? JSON.parse(historyJson) : [];
-
-      const index = history.indexOf(fileId);
-      if (index !== -1) {
-        history.splice(index, 1);
-        localStorage.setItem('text-reveal-history', JSON.stringify(history));
-      }
-
-      // Update current file if needed
-      if (localStorage.getItem('text-reveal-current') === fileId) {
-        if (history.length > 0) {
-          localStorage.setItem('text-reveal-current', history[0]);
-        } else {
-          localStorage.removeItem('text-reveal-current');
-        }
-      }
-
-      // Reload the page
-      loadFiles();
     }
   }
 

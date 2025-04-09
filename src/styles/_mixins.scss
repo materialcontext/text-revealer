@@ -29,12 +29,19 @@
 }
 
 // Card styles
-@mixin card($padding: var(--space-6), $bg: var(--background-elevated), $shadow: var(--shadow-md)) {
+@mixin card($padding: var(--space-6), $bg: var(--background-elevated)) {
   background-color: $bg;
   border-radius: var(--radius-lg);
-  box-shadow: $shadow;
+  box-shadow: var(--card-shadow);
   padding: $padding;
+  border: 1px solid var(--border-color-light);
+  transition: all var(--transition-fast);
+
+  &:hover {
+    box-shadow: var(--card-shadow-hover);
+  }
 }
+
 
 // Button styles
 @mixin button-base {
@@ -116,13 +123,11 @@
   font-size: var(--text-base);
   line-height: var(--leading-normal);
   color: var(--text-color);
-  background-color: var(--background-color);
+  background-color: var(--background-elevated);
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 
   &:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px var(--primary-light);
+    @include focus-ring;
   }
 
   &::placeholder {
@@ -179,7 +184,8 @@
 // Focus styles for accessibility
 @mixin focus-ring {
   outline: none;
-  box-shadow: 0 0 0 3px var(--primary-light);
+  box-shadow: var(--focus-shadow);
+  border-color: var(--primary-color);
 }
 
 // Elevated container style (card-like appearance)
@@ -187,6 +193,7 @@
   background-color: var(--background-elevated);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color-light);
 }
 
 // Status message styling

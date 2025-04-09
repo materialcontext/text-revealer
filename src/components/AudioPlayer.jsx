@@ -54,6 +54,12 @@ const AudioPlayer = ({ audioSrc, onLoadAudio }) => {
     }
   };
 
+  // Handle audio playback errors
+  const handleError = (e) => {
+    console.error('Audio playback error:', e);
+    // Could add more advanced error handling here
+  };
+
   // Toggle play/pause
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -61,7 +67,14 @@ const AudioPlayer = ({ audioSrc, onLoadAudio }) => {
     if (isPlaying) {
       audioRef.current.pause();
     } else {
-      audioRef.current.play();
+      // Add a play promise with error handling
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.error("Play error:", error);
+          setIsPlaying(false);
+        });
+      }
     }
 
     setIsPlaying(!isPlaying);
@@ -71,7 +84,7 @@ const AudioPlayer = ({ audioSrc, onLoadAudio }) => {
   const handleSeek = (e) => {
     if (!audioRef.current) return;
 
-    const newTime = e.target.value;
+    const newTime = parseFloat(e.target.value);
     audioRef.current.currentTime = newTime;
     setCurrentTime(newTime);
   };
@@ -127,6 +140,7 @@ const AudioPlayer = ({ audioSrc, onLoadAudio }) => {
         onLoadedMetadata={handleLoadedMetadata}
         onTimeUpdate={handleTimeUpdate}
         onEnded={() => setIsPlaying(false)}
+        onError={handleError}
       />
 
       <button
@@ -143,7 +157,8 @@ const AudioPlayer = ({ audioSrc, onLoadAudio }) => {
           type="range"
           className="seek-slider"
           min="0"
-          max={duration}
+          max={duration || 0}
+          step="0.01"
           value={currentTime}
           onChange={handleSeek}
         />

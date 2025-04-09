@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { saveMultipleAudioFiles } from '../lib/storage';
+import { saveMultipleAudioFiles } from '../lib/AudioStorageService';
 
 /**
  * Component for uploading multiple audio files at once
@@ -59,6 +59,7 @@ const AudioUploader = ({ fileId, pageCount, onSuccess, onCancel }) => {
         return a.name.localeCompare(b.name);
       });
 
+      // Use the updated IndexedDB implementation
       const success = await saveMultipleAudioFiles(fileId, sortedFiles);
 
       if (success) {
@@ -68,7 +69,7 @@ const AudioUploader = ({ fileId, pageCount, onSuccess, onCancel }) => {
       }
     } catch (error) {
       console.error('Error in bulk audio upload:', error);
-      setError('An error occurred during upload.');
+      setError(`An error occurred during upload: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -83,7 +84,7 @@ const AudioUploader = ({ fileId, pageCount, onSuccess, onCancel }) => {
       <h3>Add Audio Files</h3>
 
       <p className="instruction">
-        Upload {pageCount} audio files - one for each page. Files should be numbered to match page order.
+        Upload {pageCount} audio file{pageCount !== 1 ? 's' : ''} - one for each page. Files should be named in the order you want them to appear.
       </p>
 
       {error && <div className="error-message">{error}</div>}
@@ -139,6 +140,8 @@ const AudioUploader = ({ fileId, pageCount, onSuccess, onCancel }) => {
 
       <div className="file-format-note">
         <strong>Note:</strong> Accepted formats include MP3, WAV, OGG and other browser-supported audio formats.
+        <br/>
+        <strong>Tip:</strong> Name your files with numbers to ensure correct ordering (e.g., 01_intro.mp3, 02_main.mp3).
       </div>
     </div>
   );

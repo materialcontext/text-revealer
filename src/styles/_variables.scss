@@ -5,59 +5,70 @@
 // Color Palette - More professional, less vibrant colors
 :root {
   // Primary colors
-  --primary-color: #3b82f6; // More subdued blue
-  --primary-dark: #2563eb; // Darker blue for hover states
-  --primary-light: #eff6ff; // Lighter blue background
+  --primary-color: #4a75c4; // Softer blue
+  --primary-dark: #355599; // Deeper, less saturated blue
+  --primary-light: #f0f5ff; // Subtle blue tint
 
   // Secondary colors
-  --secondary-color: #6366f1; // More muted purple
-  --secondary-dark: #4f46e5; // Darker purple for hover
-  --secondary-light: #eef2ff; // Lighter purple background
+  --secondary-color: #6b68d8; // Muted indigo
+  --secondary-dark: #4e4bb5; // Deeper indigo
+  --secondary-light: #f4f4ff; // Very subtle indigo tint
 
   // Accent colors
-  --accent-color: #10b981; // More muted teal
-  --accent-dark: #059669; // Darker teal for hover
-  --accent-light: #ecfdf5; // Lighter teal background
+  --accent-color: #4e9e81; // Muted teal
+  --accent-dark: #2f7a64; // Deeper teal
+  --accent-light: #f2f9f7; // Subtle teal tint
 
-  // Neutral colors - slightly warmer grays
-  --gray-50: #f9fafb;  // Lightest gray for backgrounds
-  --gray-100: #f3f4f6; // Light gray for alternate backgrounds
-  --gray-200: #e5e7eb; // Medium light gray for borders
-  --gray-300: #d1d5db; // Medium gray for disabled elements
-  --gray-400: #9ca3af; // Medium dark gray for icons
-  --gray-500: #6b7280; // Dark gray for secondary text
-  --gray-600: #4b5563; // Darker gray for primary text
-  --gray-700: #374151; // Very dark gray for headings
-  --gray-800: #1f2937; // Nearly black for emphasized text
+  // Neutral colors - softer grays with slight warmth
+  --gray-50: #f7f8f9;  // Very soft, slightly warm gray
+  --gray-100: #ebeef2; // Soft light gray
+  --gray-200: #e0e4ea // medium light gray
+  --gray-300: #d3d9e2; // Medium gray
+  --gray-400: #c8cfd7; // Medium dark gray
+  --gray-500: #a7b0bc; // Dark gray
+  --gray-600: #6c7580; // Darker gray
+  --gray-700: #4a505a; // Very dark gray
+  --gray-800: #363b43; // Nearly black gray
 
-  // Functional colors - more muted
-  --success-color: #10b981; // Green for success
-  --warning-color: #f59e0b; // Amber for warnings
-  --error-color: #ef4444;   // Red for errors
-  --info-color: #3b82f6;    // Blue for information
+  // Background colors - paper-like
+  --background-color: #f5f5f7; // Soft, very light grayish-blue
+  --background-alt: #eef0f2;   // Slightly darker option for alternate areas
+  --background-elevated: #fafbfc; // Not fully white, but elevated
+  --reader-background: #f8f9fa;
+
+  // Content area backgrounds
+  --reader-background: #f8f9fa;
+
+  // Functional colors
+  --success-color: #4c9e81;
+  --warning-color: #e2ad5d;
+  --error-color: #d95757;
+  --info-color: #4a75c4;
 
   // Text colors
   --text-color: var(--gray-700);
   --text-light: var(--gray-500);
   --text-dark: var(--gray-800);
-  --text-inverted: white;
-
-  // Background colors
-  --background-color: white;
-  --background-alt: var(--gray-50);
-  --background-elevated: white;
+  --text-inverted: #ffffff;
 
   // UI Element colors
   --border-color: var(--gray-200);
   --border-color-dark: var(--gray-300);
+  --border-color-light: var(--gray-100)
   --blank-color: var(--gray-100);
-  --revealed-color: var(--primary-light);
-
-  // Shadow styles - slightly more subtle
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.02);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.04), 0 4px 6px rgba(0, 0, 0, 0.02);
-  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+  --revealed-color: var(--primary-light);  // Shadow styles - slightly more subtle
+  --shadow-sm: 0 1px 2px rgba(23, 39, 85, 0.03);
+  --shadow-md: 0 3px 8px rgba(23, 39, 85, 0.04), 0 1px 3px rgba(23, 39, 85, 0.03);
+  --shadow-lg: 0 8px 16px rgba(23, 39, 85, 0.04), 0 2px 5px rgba(23, 39, 85, 0.03);
+  --shadow-inner: inset 0 2px 4px rgba(23, 39, 85, 0.03);
+  // Focus state shadow - more subtle blue glow
+  --focus-shadow: 0 0 0 3px rgba(74, 117, 196, 0.15);
+    // Card-specific shadow - slightly warmer for content areas
+  --card-shadow: 0 2px 6px rgba(45, 55, 72, 0.05), 0 0 1px rgba(45, 55, 72, 0.1);
+  // Add subtle card hover effect
+  --card-shadow-hover: 0 4px 12px rgba(45, 55, 72, 0.08), 0 0 1px rgba(45, 55, 72, 0.1);
+  // Dialog/modal shadow - more prominent
+  --modal-shadow: 0 10px 25px rgba(45, 55, 72, 0.12), 0 0 1px rgba(45, 55, 72, 0.1);
 
   // Typography - slightly more readable
   --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;

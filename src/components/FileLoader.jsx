@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { parseText, parseJson, prepareForReader } from '../lib/parser';
-import { saveFile, saveMultipleAudioFiles } from '../lib/storage';
+import { saveFile } from '../lib/storage';
+import { saveMultipleAudioFiles } from '../lib/AudioStorageService';
 import { isJsonFile } from '../lib/utils';
 
 const FileLoader = () => {
@@ -13,6 +14,7 @@ const FileLoader = () => {
   const [showAudioPrompt, setShowAudioPrompt] = useState(false);
   const [savedFileId, setSavedFileId] = useState(null);
   const [pageCount, setPageCount] = useState(0);
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   const audioInputRef = useRef(null);
 
@@ -56,11 +58,14 @@ const FileLoader = () => {
       return;
     }
 
+    setLoading(true);
+
     try {
       const parsed = isJsonFile(filename) ? parseJson(content) : parseText(content);
 
       if (!parsed || !parsed.length) {
         setError('Invalid content format');
+        setLoading(false);
         return;
       }
 
@@ -71,6 +76,7 @@ const FileLoader = () => {
 
       if (!fileId) {
         setError('Failed to save content');
+        setLoading(false);
         return;
       }
 
@@ -88,6 +94,8 @@ const FileLoader = () => {
     } catch (err) {
       console.error(err);
       setError('Failed to process content: ' + err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -97,8 +105,12 @@ const FileLoader = () => {
       return;
     }
 
+    setLoading(true);
+
     try {
+      // Use the IndexedDB implementation
       const audioSuccess = await saveMultipleAudioFiles(savedFileId, audioFiles);
+
       if (!audioSuccess) {
         setError('Content was saved but failed to save audio files');
       } else {
@@ -110,6 +122,8 @@ const FileLoader = () => {
     } catch (err) {
       console.error(err);
       setError('Error uploading audio files: ' + err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -134,8 +148,8 @@ const FileLoader = () => {
 
         <div className="audio-info">
           <p>Please select <strong>{pageCount}</strong> audio file{pageCount !== 1 ? 's' : ''}, one for each page of your content:</p>
-          <button className="audio-select-button" onClick={handleSelectAudio}>
-            Select Audio Files
+          <button className="audio-select-button" onClick={handleSelectAudio} disabled={loading}>
+            {loading ? 'Processing...' : 'Select Audio Files'}
           </button>
           <input
             type="file"
@@ -159,16 +173,17 @@ const FileLoader = () => {
         </div>
 
         {error && <div className="error-message">{error}</div>}
+        {success && <div className="success-message">{success}</div>}
 
         <div className="audio-prompt-actions">
           <button
             className="btn-primary"
             onClick={handleAudioUpload}
-            disabled={audioFiles.length === 0}
+            disabled={audioFiles.length === 0 || loading}
           >
-            Upload Audio Files
+            {loading ? 'Uploading...' : 'Upload Audio Files'}
           </button>
-          <button className="btn-ghost" onClick={handleCancelAudio}>
+          <button className="btn-ghost" onClick={handleCancelAudio} disabled={loading}>
             Skip and Continue
           </button>
         </div>
@@ -258,8 +273,8 @@ another paragraph with __
           )}
         </div>
 
-        <button type="submit" className="submit-button">
-          Load Content
+        <button type="submit" className="submit-button" disabled={loading}>
+          {loading ? 'Processing...' : 'Load Content'}
         </button>
       </form>
     </div>
