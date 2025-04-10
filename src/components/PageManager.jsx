@@ -333,45 +333,47 @@ const PageManager = ({ file: fileProp }) => {
     const currentPage = pages[currentPageIndex];
 
     return (
-        <div className={`container ${presentationMode ? 'presentation-mode' : ''}`}>
-            <div className="reader-wrapper">
-                <div
-                    className={`reader-container ${presentationMode ? 'presentation-mode' : ''}`}
-                    ref={containerRef}
-                    tabIndex="0" // Make container focusable for keyboard navigation
-                >
-                    <h2>{currentPage.title}</h2>
+        <div className={`reader-wrapper ${presentationMode ? 'presentation-mode' : ''}`}>
+            <div className={`container ${presentationMode ? 'presentation-mode' : ''}`}>
+                <div className="reader-wrapper">
+                    <div
+                        className={`reader-container ${presentationMode ? 'presentation-mode' : ''}`}
+                        ref={containerRef}
+                        tabIndex="0" // Make container focusable for keyboard navigation
+                    >
+                        <h2>{currentPage.title}</h2>
 
-                    <div className='reader-content'>
-                        {currentPage.sections.map((section, sectionIndex) => (
-                            <RevealableSection
-                                key={`${currentPageIndex}-${sectionIndex}`}
-                                section={section}
-                                revealedIndices={getRevealedIndicesForSection(sectionIndex, pages)}
-                                onBlankClick={(blankIndex) => handleBlankClick(sectionIndex, blankIndex, pages)}
-                            />
-                        ))}
+                        <div className='reader-content'>
+                            {currentPage.sections.map((section, sectionIndex) => (
+                                <RevealableSection
+                                    key={`${currentPageIndex}-${sectionIndex}`}
+                                    section={section}
+                                    revealedIndices={getRevealedIndicesForSection(sectionIndex, pages)}
+                                    onBlankClick={(blankIndex) => handleBlankClick(sectionIndex, blankIndex, pages)}
+                                />
+                            ))}
+                        </div>
+
+                        <ControlBar
+                            fileId={fileId}
+                            currentPage={currentPageIndex}
+                            totalPages={pages.length}
+                            onPrevPage={handlePrevPage}
+                            onNextPage={handleNextPage}
+                            onExit={handleExit}
+                            audioSrc={audioSrc}
+                            presentationMode={presentationMode}
+                            onToggleMode={handleToggleMode}
+                        />
                     </div>
-
-                    <ControlBar
-                        fileId={fileId}
-                        currentPage={currentPageIndex}
-                        totalPages={pages.length}
-                        onPrevPage={handlePrevPage}
-                        onNextPage={handleNextPage}
-                        onExit={handleExit}
-                        audioSrc={audioSrc}
-                        presentationMode={presentationMode}
-                        onToggleMode={handleToggleMode}
-                    />
                 </div>
+                {!presentationMode && <KeyboardHelp />}
+                {presentationMode && (
+                    <div className="presentation-shortcuts-hint">
+                        Press P to exit presentation mode | Press Q to quit
+                    </div>
+                )}
             </div>
-            {!presentationMode && <KeyboardHelp />}
-            {presentationMode && (
-                <div className="presentation-shortcuts-hint">
-                    Press P to exit presentation mode | Press Q to quit
-                </div>
-            )}
         </div>
     );
 };

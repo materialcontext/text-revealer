@@ -31,7 +31,6 @@ const ControlBar = ({
   const [loading, setLoading] = useState(false);
   const [currentPageSaved, setCurrentPageSaved] = useState(currentPage);
   const [isVisible, setIsVisible] = useState(true);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const hideTimeoutRef = useRef(null);
   const controlBarRef = useRef(null);
 
@@ -42,42 +41,42 @@ const ControlBar = ({
 
   // Handle auto-hide behavior for presentation mode
   useEffect(() => {
+    // Reset state when presentationMode changes
+    setIsVisible(true);
+
     if (!presentationMode) {
-      setIsVisible(true);
+      // Clear any existing timeout when not in presentation mode
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+        hideTimeoutRef.current = null;
+      }
       return;
     }
 
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+    // Start the initial hide timeout
+    hideTimeoutRef.current = setTimeout(() => {
+      setIsVisible(false);
+    }, 3000);
 
+    const handleMouseMove = (e) => {
       // Check if mouse is near the bottom of the screen
       const windowHeight = window.innerHeight;
-      const threshold = windowHeight * 0.1; // Bottom 10% of the screen
+      const threshold = windowHeight * 0.15; // Bottom 15% of the screen
 
       if (e.clientY > windowHeight - threshold) {
+        // Show the control bar when near bottom
         setIsVisible(true);
 
-        // Clear any existing timeout
-        if (hideTimeoutRef.current) {
-          clearTimeout(hideTimeoutRef.current);
-        }
-      } else if (isVisible) {
-        // Start the hide timeout
+        // Reset the hide timeout
         if (hideTimeoutRef.current) {
           clearTimeout(hideTimeoutRef.current);
         }
 
         hideTimeoutRef.current = setTimeout(() => {
           setIsVisible(false);
-        }, 2000);
+        }, 3000);
       }
     };
-
-    // Initial state - hide after 2 seconds in presentation mode
-    setIsVisible(true);
-    hideTimeoutRef.current = setTimeout(() => {
-      setIsVisible(false);
-    }, 2000);
 
     // Add event listener
     window.addEventListener('mousemove', handleMouseMove);
@@ -89,7 +88,7 @@ const ControlBar = ({
         clearTimeout(hideTimeoutRef.current);
       }
     };
-  }, [presentationMode, isVisible]);
+  }, [presentationMode]); // Only re-run when presentationMode changes
 
   const handleLoadAudio = async (file) => {
     if (!fileId) return;
@@ -169,7 +168,7 @@ const ControlBar = ({
           onClick={onToggleMode}
           aria-label="Toggle presentation mode"
         >
-          {presentationMode ? 'Normal' : 'Present'}
+          {presentationMode ? 'Exit Present' : 'Present'}
         </button>
         <button
           className="exit-button"
