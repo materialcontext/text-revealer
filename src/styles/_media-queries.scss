@@ -16,13 +16,19 @@
   }
 
   .reader-content {
-    font-size: 1rem;
-    line-height: 1.5;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    margin-bottom: var(--space-4)
+  }
+
+  .text-reveal-section {
+    margin-bottom: 1vh;
   }
 
   h2 {
-    font-size: var(--text-xl);
-    margin-bottom: var(--space-4);
+    font-size: var(--text-base)!important;
+    margin-bottom: 1vh!important;
+    padding-bottom: 0!important;
   }
 
   // Adjust blanks to be more compact
@@ -47,8 +53,8 @@
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     z-index: 100;
     border-radius: 0;
-    padding: min(8px, 1vh)!important;
-    height: min(40px, 6vh);
+    padding: 1vh!important;
+    height: 6vh;
     margin: 0;
     display: flex;
     flex-direction: row;
@@ -59,7 +65,7 @@
   .navigation-section {
     display: flex;
     align-items: center;
-    gap: min(8px, 1.5vh);
+    gap: 1.5vh;
   }
 
   .reader-wrapper {
@@ -68,49 +74,50 @@
   }
 
   .nav-button, .exit-button, .add-audio-button {
-    padding: min(4px, 0.75vh) min(8px, 1.5vh);
-    font-size: min(0.85rem, 1.5vh);
+    padding: 0.75vh 1.5vh;
+    font-size: 1.5vh;
     min-width: 0;
   }
 
   .nav-button {
-    min-width: min(40px, 5vh);
+    min-width: 5vh;
   }
 
   .page-indicator {
-    font-size: min(0.75rem, 1.8vh);
-    padding: min(2px, 0.375vh) min(6px, 1.125vh);
+    font-size: 1.8vh;
+    padding: 0.375vh 1.125vh;
   }
 
   // Adjust audio section for fixed bar
   .audio-section {
     flex: 1;
     max-width: 50%;
-    margin: 0 min(8px, 1.5vh);
+    margin: 1.5vh;
   }
 
   .audio-player {
-    height: min(36px, 6vh);
-    padding: min(4px, 0.75vh);
+    height: 6vh;
+    padding: 0.75vh;
   }
 
   .play-button {
-    width: min(28px, 4vh);
-    height: min(28px, 4vh);
-    margin-right: min(8px, 1.25vh);
+    width: 4vh;
+    height: 4vh;
+    margin-right: 0.75vh;
+    font-size: 1.65vh
   }
 
   .time-display {
-    font-size: min(0.7rem, 1.65vh);
-    width: min(2.5rem, 7.5vh);
+    font-size: 1.65vh;
+    width: 7.5vh;
   }
 
   .seek-slider {
-    height: min(3px, 1.125vh);
+    height: 1.125vh;
   }
 
   .exit-section {
-    margin-left: min(8px, 1.5vh);
+    margin-left: 1.5vh;
   }
 
   // Add padding to bottom of page to account for fixed control bar
@@ -262,32 +269,6 @@
     max-width: 900px;
     margin-left: auto;
     margin-right: auto;
-  }
-}
-
-// Combined high DPI and small screen
-@media (min-resolution: 150dpi) and (max-width: 480px) {
-  .control-bar {
-    flex-direction: column;
-    padding: 6px;
-  }
-
-  .audio-section {
-    max-width: 100%;
-    margin: 8px 0;
-  }
-
-  .navigation-section {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .exit-section {
-    width: 100%;
-  }
-
-  main {
-    padding-bottom: 110px; // Increase padding for larger control bar
   }
 }
 

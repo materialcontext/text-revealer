@@ -104,13 +104,13 @@ const PageManager = ({ file: fileProp }) => {
                     // Hide the last revealed blank
                     handleHideLastBlank();
                     break;
-                case 'ArrowDown':
+                case '.':
                     // Go to next page
                     if (currentPageIndex < processedPages.length - 1) {
                         setCurrentPageIndex(currentPageIndex + 1);
                     }
                     break;
-                case 'ArrowUp':
+                case ',':
                     // Go to previous page
                     if (currentPageIndex > 0) {
                         setCurrentPageIndex(currentPageIndex - 1);

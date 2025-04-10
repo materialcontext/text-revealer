@@ -246,6 +246,11 @@
   }
 }
 
+.page-indicatior {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-md)
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
