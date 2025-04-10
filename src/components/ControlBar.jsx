@@ -40,55 +40,39 @@ const ControlBar = ({
   }, [currentPage]);
 
   // Handle auto-hide behavior for presentation mode
-  useEffect(() => {
-    // Reset state when presentationMode changes
-    setIsVisible(true);
+useEffect(() => {
+  // Reset state when presentationMode changes
+  setIsVisible(true);
 
-    if (!presentationMode) {
-      // Clear any existing timeout when not in presentation mode
-      if (hideTimeoutRef.current) {
-        clearTimeout(hideTimeoutRef.current);
-        hideTimeoutRef.current = null;
-      }
-      return;
+  if (!presentationMode) {
+    // Clear any existing timeout when not in presentation mode
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current);
+      hideTimeoutRef.current = null;
     }
+    return;
+  }
 
-    // Start the initial hide timeout
-    hideTimeoutRef.current = setTimeout(() => {
-      setIsVisible(false);
-    }, 3000);
+  const handleMouseMove = (e) => {
+    // Check if mouse is near the bottom of the screen
+    const windowHeight = window.innerHeight;
+    const threshold = windowHeight * 0.08; // Bottom 15% of the screen
 
-    const handleMouseMove = (e) => {
-      // Check if mouse is near the bottom of the screen
-      const windowHeight = window.innerHeight;
-      const threshold = windowHeight * 0.15; // Bottom 15% of the screen
+    // Directly set visibility based on position without timeouts
+    setIsVisible(e.clientY > windowHeight - threshold);
+  };
 
-      if (e.clientY > windowHeight - threshold) {
-        // Show the control bar when near bottom
-        setIsVisible(true);
+  // Add event listener
+  window.addEventListener('mousemove', handleMouseMove);
 
-        // Reset the hide timeout
-        if (hideTimeoutRef.current) {
-          clearTimeout(hideTimeoutRef.current);
-        }
-
-        hideTimeoutRef.current = setTimeout(() => {
-          setIsVisible(false);
-        }, 3000);
-      }
-    };
-
-    // Add event listener
-    window.addEventListener('mousemove', handleMouseMove);
-
-    // Clean up
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (hideTimeoutRef.current) {
-        clearTimeout(hideTimeoutRef.current);
-      }
-    };
-  }, [presentationMode]); // Only re-run when presentationMode changes
+  // Clean up
+  return () => {
+    window.removeEventListener('mousemove', handleMouseMove);
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current);
+    }
+  };
+}, [presentationMode]);
 
   const handleLoadAudio = async (file) => {
     if (!fileId) return;
