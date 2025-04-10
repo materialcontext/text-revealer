@@ -41,7 +41,7 @@
     border: none;
 
     h2 {
-      font-size: var(--text-base);
+      font-size: var(--text-large);
       margin-bottom: var(--space-2);
     }
   }
@@ -580,6 +580,10 @@
   // For presentation mode, keep it full width
   .presentation-mode.reader-container {
     max-width: 100%;
+  }
+
+  .presentation-mode.reader-content {
+    font-size: var(--text-4xl);
   }
 }
 
