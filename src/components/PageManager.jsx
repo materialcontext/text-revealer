@@ -33,6 +33,7 @@ const PageManager = ({ file: fileProp }) => {
     const [audioSrc, setAudioSrc] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [presentationMode, setPresentationMode] = useState(false);
     const containerRef = useRef(null);
 
     // Load from localStorage on mount if no file prop was passed
@@ -86,7 +87,7 @@ const PageManager = ({ file: fileProp }) => {
         loadAudio();
     }, [fileId, currentPageIndex]);
 
-    // Setup keyboard navigation
+    // Setup keyboard navigation and shortcuts
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (!file || !file.content) return;
@@ -116,6 +117,16 @@ const PageManager = ({ file: fileProp }) => {
                         setCurrentPageIndex(currentPageIndex - 1);
                     }
                     break;
+                case 'p': // Toggle presentation mode
+                case 'P':
+                    e.preventDefault();
+                    setPresentationMode(!presentationMode);
+                    break;
+                case 'q': // Exit reader
+                case 'Q':
+                    e.preventDefault();
+                    window.location.href = '/';
+                    break;
                 default:
                     break;
             }
@@ -128,7 +139,7 @@ const PageManager = ({ file: fileProp }) => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [file, currentPageIndex, pageRevealStates]);
+    }, [file, currentPageIndex, pageRevealStates, presentationMode]);
 
     // Handle revealing the next blank on the page
     const handleRevealNextBlank = (pages) => {
@@ -280,6 +291,10 @@ const PageManager = ({ file: fileProp }) => {
         window.location.href = '/';
     };
 
+    const handleToggleMode = () => {
+        setPresentationMode(!presentationMode);
+    };
+
     if (loading) {
         return (
             <div className="reader-loading">
@@ -318,10 +333,10 @@ const PageManager = ({ file: fileProp }) => {
     const currentPage = pages[currentPageIndex];
 
     return (
-        <div className="container">
+        <div className={`container ${presentationMode ? 'presentation-mode' : ''}`}>
             <div className="reader-wrapper">
                 <div
-                    className="reader-container"
+                    className={`reader-container ${presentationMode ? 'presentation-mode' : ''}`}
                     ref={containerRef}
                     tabIndex="0" // Make container focusable for keyboard navigation
                 >
@@ -346,10 +361,17 @@ const PageManager = ({ file: fileProp }) => {
                         onNextPage={handleNextPage}
                         onExit={handleExit}
                         audioSrc={audioSrc}
+                        presentationMode={presentationMode}
+                        onToggleMode={handleToggleMode}
                     />
                 </div>
             </div>
-            <KeyboardHelp />
+            {!presentationMode && <KeyboardHelp />}
+            {presentationMode && (
+                <div className="presentation-shortcuts-hint">
+                    Press P to exit presentation mode | Press Q to quit
+                </div>
+            )}
         </div>
     );
 };

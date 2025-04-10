@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import AudioPlayer from './AudioPlayer';
 import { saveAudioFile, getAudioForPage } from '../lib/AudioStorageService';
 
@@ -12,6 +12,8 @@ import { saveAudioFile, getAudioForPage } from '../lib/AudioStorageService';
  * @param {function} props.onNextPage - Function to go to next page
  * @param {function} props.onExit - Function to exit reader
  * @param {string} props.audioSrc - Source URL for the audio file (optional)
+ * @param {boolean} props.presentationMode - Whether in presentation mode
+ * @param {function} props.onToggleMode - Function to toggle presentation mode
  */
 const ControlBar = ({
   fileId,
@@ -20,17 +22,74 @@ const ControlBar = ({
   onPrevPage,
   onNextPage,
   onExit,
-  audioSrc
+  audioSrc,
+  presentationMode,
+  onToggleMode
 }) => {
   const isFirstPage = currentPage === 0;
   const isLastPage = currentPage === totalPages - 1;
   const [loading, setLoading] = useState(false);
   const [currentPageSaved, setCurrentPageSaved] = useState(currentPage);
+  const [isVisible, setIsVisible] = useState(true);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const hideTimeoutRef = useRef(null);
+  const controlBarRef = useRef(null);
 
   // Keep track of the current page to prevent reset when adding audio
   useEffect(() => {
     setCurrentPageSaved(currentPage);
   }, [currentPage]);
+
+  // Handle auto-hide behavior for presentation mode
+  useEffect(() => {
+    if (!presentationMode) {
+      setIsVisible(true);
+      return;
+    }
+
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+
+      // Check if mouse is near the bottom of the screen
+      const windowHeight = window.innerHeight;
+      const threshold = windowHeight * 0.1; // Bottom 10% of the screen
+
+      if (e.clientY > windowHeight - threshold) {
+        setIsVisible(true);
+
+        // Clear any existing timeout
+        if (hideTimeoutRef.current) {
+          clearTimeout(hideTimeoutRef.current);
+        }
+      } else if (isVisible) {
+        // Start the hide timeout
+        if (hideTimeoutRef.current) {
+          clearTimeout(hideTimeoutRef.current);
+        }
+
+        hideTimeoutRef.current = setTimeout(() => {
+          setIsVisible(false);
+        }, 2000);
+      }
+    };
+
+    // Initial state - hide after 2 seconds in presentation mode
+    setIsVisible(true);
+    hideTimeoutRef.current = setTimeout(() => {
+      setIsVisible(false);
+    }, 2000);
+
+    // Add event listener
+    window.addEventListener('mousemove', handleMouseMove);
+
+    // Clean up
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+      }
+    };
+  }, [presentationMode, isVisible]);
 
   const handleLoadAudio = async (file) => {
     if (!fileId) return;
@@ -59,11 +118,15 @@ const ControlBar = ({
     }
   };
 
-  // Determine if we're in a high DPI context for responsive design
-  const isHighDpi = window.matchMedia && window.matchMedia('(min-resolution: 150dpi)').matches;
+  // Presentation mode classes
+  const controlBarClasses = [
+    'control-bar',
+    presentationMode ? 'presentation-mode' : '',
+    presentationMode && !isVisible ? 'hidden' : ''
+  ].filter(Boolean).join(' ');
 
   return (
-    <div className={`control-bar ${isHighDpi ? 'control-bar-fixed' : ''}`}>
+    <div className={controlBarClasses} ref={controlBarRef}>
       <div className="navigation-section">
         <button
           className={`nav-button prev ${isFirstPage ? 'hidden' : ''}`}
@@ -71,7 +134,7 @@ const ControlBar = ({
           disabled={isFirstPage}
           aria-label="Previous page"
         >
-          &larr; Previous
+          {presentationMode ? '←' : '← Previous'}
         </button>
 
         <div className="page-indicator">
@@ -84,7 +147,7 @@ const ControlBar = ({
           disabled={isLastPage}
           aria-label="Next page"
         >
-          Next &rarr;
+          {presentationMode ? '→' : 'Next →'}
         </button>
       </div>
 
@@ -95,11 +158,19 @@ const ControlBar = ({
           <AudioPlayer
             audioSrc={audioSrc}
             onLoadAudio={handleLoadAudio}
+            compact={presentationMode}
           />
         )}
       </div>
 
       <div className="exit-section">
+        <button
+          className="mode-toggle-button"
+          onClick={onToggleMode}
+          aria-label="Toggle presentation mode"
+        >
+          {presentationMode ? 'Normal' : 'Present'}
+        </button>
         <button
           className="exit-button"
           onClick={onExit}

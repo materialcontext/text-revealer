@@ -41,8 +41,10 @@ const KeyboardHelp = () => {
         <div className="keyboard-help-grid">
           <div><span className="key">→</span> Reveal next blank</div>
           <div><span className="key">←</span> Hide last blank</div>
-          <div><span className="key">↓</span> Next page</div>
-          <div><span className="key">↑</span> Previous page</div>
+          <div><span className="key">.</span> Next page</div>
+          <div><span className="key">,</span> Previous page</div>
+          <div><span className="key">P</span> Toggle presentation mode</div>
+          <div><span className="key">Q</span> Exit to home page</div>
         </div>
       </div>
     </>

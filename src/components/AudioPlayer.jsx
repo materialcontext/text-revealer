@@ -5,8 +5,9 @@ import React, { useState, useRef, useEffect } from 'react';
  * @param {object} props - Component props
  * @param {string} props.audioSrc - Source URL for the audio file
  * @param {function} props.onLoadAudio - Function to handle loading a new audio file
+ * @param {boolean} props.compact - Whether to display in compact mode for presentation
  */
-const AudioPlayer = ({ audioSrc, onLoadAudio }) => {
+const AudioPlayer = ({ audioSrc, onLoadAudio, compact = false }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -114,12 +115,12 @@ const AudioPlayer = ({ audioSrc, onLoadAudio }) => {
   // If no audio source is provided, show the upload button
   if (!audioSrc) {
     return (
-      <div className="audio-player empty">
+      <div className={`audio-player empty ${compact ? 'compact' : ''}`}>
         <button
           className="add-audio-button"
           onClick={handleLoadAudioClick}
         >
-          Add Audio File
+          {compact ? '+' : 'Add Audio File'}
         </button>
         <input
           type="file"
@@ -133,7 +134,7 @@ const AudioPlayer = ({ audioSrc, onLoadAudio }) => {
   }
 
   return (
-    <div className="audio-player">
+    <div className={`audio-player ${compact ? 'compact' : ''}`}>
       <audio
         ref={audioRef}
         src={audioSrc}
@@ -152,7 +153,7 @@ const AudioPlayer = ({ audioSrc, onLoadAudio }) => {
       </button>
 
       <div className="audio-controls">
-        <span className="time-display">{formatTime(currentTime)}</span>
+        {!compact && <span className="time-display">{formatTime(currentTime)}</span>}
         <input
           type="range"
           className="seek-slider"
@@ -162,16 +163,18 @@ const AudioPlayer = ({ audioSrc, onLoadAudio }) => {
           value={currentTime}
           onChange={handleSeek}
         />
-        <span className="time-display">{formatTime(duration)}</span>
+        {!compact && <span className="time-display">{formatTime(duration)}</span>}
       </div>
 
-      <button
-        className="replace-audio-button"
-        onClick={handleLoadAudioClick}
-        aria-label="Replace audio file"
-      >
-        ↻
-      </button>
+      {!compact && (
+        <button
+          className="replace-audio-button"
+          onClick={handleLoadAudioClick}
+          aria-label="Replace audio file"
+        >
+          ↻
+        </button>
+      )}
 
       <input
         type="file"

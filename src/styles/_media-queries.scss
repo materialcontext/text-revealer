@@ -1,206 +1,121 @@
 /*
- * Enhanced media queries for high DPI displays and zoom behavior
+ * Consolidated media queries with a focus on performance and readability
+ * This file contains global responsive rules that affect multiple components
  */
 
-// High DPI displays (heavily zoomed view)
-@media (min-resolution: 120dpi) {
-  // Make all UI elements more compact
-  body {
-    font-size: 16px;
-  }
+// Base media query mixins - these stay in the _mixins.scss file
+// @include mobile-only - max-width: 639px
+// @include tablet - min-width: 640px
+// @include desktop - min-width: 1024px
+// @include large-desktop - min-width: 1280px
 
-  .reader-container {
-    padding: var(--space-4);
-    margin: 0;
-    border-radius: var(--radius-md);
-  }
-
-  .reader-content {
-    font-size: 1.4rem;
-    line-height: 1.6;
-    margin-bottom: var(--space-4)
-  }
-
-  .text-reveal-section {
-    margin-bottom: 1vh;
-  }
-
-  h2 {
-    font-size: var(--text-base)!important;
-    margin-bottom: 1vh!important;
-    padding-bottom: 0!important;
-  }
-
-  // Adjust blanks to be more compact
-  .blank, .revealed {
-    padding: 0 var(--space-1);
-    margin: 0 var(--space-1);
-    min-width: 2em;
-  }
-
-  // Hide keyboard help
-  .keyboard-toggle, .keyboard-help {
-    display: none;
-  }
-
-  // Enhanced fixed control bar for zoomed view
-  .control-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-    border-radius: 0;
-    padding: 1vh!important;
-    height: 6vh;
-    margin: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .navigation-section {
-    display: flex;
-    align-items: center;
-    gap: 1.5vh;
-  }
-
-  .reader-wrapper {
-    margin: 0;
-    padding-bottom: 40px; // Space for fixed control bar
-  }
-
-  .nav-button, .exit-button, .add-audio-button {
-    padding: 0.75vh 1.5vh;
-    font-size: 1.5vh;
-    min-width: 0;
-  }
-
-  .nav-button {
-    min-width: 5vh;
-  }
-
-  .page-indicator {
-    font-size: 1.8vh;
-    padding: 0.375vh 1.125vh;
-  }
-
-  // Adjust audio section for fixed bar
-  .audio-section {
-    flex: 1;
-    max-width: 50%;
-    margin: 1.5vh;
-  }
-
-  .audio-player {
-    height: 6vh;
-    padding: 0.75vh;
-  }
-
-  .play-button {
-    width: 4vh;
-    height: 4vh;
-    margin-right: 0.75vh;
-    font-size: 1.65vh
-  }
-
-  .time-display {
-    font-size: 1.65vh;
-    width: 7.5vh;
-  }
-
-  .seek-slider {
-    height: 1.125vh;
-  }
-
-  .exit-section {
-    margin-left: 1.5vh;
-  }
-
-  // Add padding to bottom of page to account for fixed control bar
-  main {
-    padding-bottom: 40px;
-  }
-}
-
-// Very small screens
+// Global responsive adjustments
 @include mobile-only {
-  .reader-container {
+  // Global typography adjustments for mobile
+  h1 { font-size: var(--text-2xl); }
+  h2 { font-size: var(--text-xl); }
+  h3 { font-size: var(--text-lg); }
+
+  // Container padding adjustments
+  .container {
+    padding-left: var(--space-3);
+    padding-right: var(--space-3);
+  }
+
+  // Adjust default card padding
+  .card {
     padding: var(--space-3);
-    border-radius: var(--radius-md);
   }
 
-  .reader-content {
-    font-size: var(--text-base);
-    line-height: 1.5;
+  // Convert most multi-column layouts to single column
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4 {
+    grid-template-columns: 1fr;
   }
 
-  .control-bar {
-    flex-direction: column;
+  // Navigation and footer adjustments
+  .nav-links {
     gap: var(--space-3);
-    padding: var(--space-3);
+
+    a {
+      font-size: var(--text-sm);
+    }
   }
 
-  .navigation-section,
-  .audio-section,
-  .exit-section {
-    width: 100%;
+  .nav-container {
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-2) var(--space-4);
+    gap: var(--space-2);
   }
 
-  .navigation-section {
-    order: 0;
-    display: flex;
-    justify-content: space-between;
+  .main-nav {
+    height: auto;
+    padding: var(--space-2) 0;
   }
 
-  .audio-section {
-    order: 1;
+  // Tabs adjustments
+  .tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    margin: 0 calc(-1 * var(--space-4));
+    padding: 0 var(--space-4);
   }
 
-  .exit-section {
-    order: 2;
-    text-align: center;
+  // Header adjustments
+  .app-header {
+    padding: var(--space-4) 0;
+    margin-bottom: var(--space-4);
   }
 
-  .exit-button {
-    width: 100%;
-  }
-
-  .page-indicator {
-    flex: 1;
-    text-align: center;
-  }
-
-  .nav-button {
-    min-width: 40px;
-  }
-
-  // Fix the instruction grid on mobile
+  // Home page instructions grid to single column
   .instruction-grid {
     grid-template-columns: 1fr;
     gap: var(--space-4);
   }
 
-  // Fix or divider
-  .or-divider {
-    &::before, &::after {
-      width: 30%;
-    }
+  // File browser specific adjustments
+  .file-grid {
+    grid-template-columns: 1fr;
   }
 
-  // More compact audio player
-  .audio-player {
-    height: 40px;
+  // File loader and history layout adjustment
+  .file-loader-with-history {
+    grid-template-columns: 1fr;
   }
 
-  .time-display {
-    width: 2.8rem;
+  // Adjust form elements
+  .form-group {
+    margin-bottom: var(--space-3);
   }
 
-  // Audio prompt in a more compact form
+  // Adjust file loader and file history padding
+  .file-loader,
+  .compact-file-history {
+    padding: var(--space-3);
+  }
+
+  .drop-area {
+    padding: var(--space-4);
+  }
+
+  .file-meta {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  // Adjust spacing for file items
+  .compact-file-item {
+    padding: var(--space-2);
+  }
+
+  // Adjust spacing for compact actions
+  .compact-actions {
+    gap: var(--space-1);
+  }
+
+  // Audio related adjustments
   .audio-prompt-container {
     padding: var(--space-3);
   }
@@ -209,43 +124,52 @@
     flex-direction: column;
     gap: var(--space-2);
   }
+
+  // General spacing adjustments
+  .section {
+    padding: var(--space-6) 0;
+  }
 }
 
-// Tablet-sized screens
+// Tablet-sized screens (640px to 1023px)
 @include tablet {
-  // Adjust instruction grid layout
+  // Layout adjustments
   .instruction-grid {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr); // 2 columns on tablet
   }
 
-  // Fix file loader with history layout
-  .file-loader-with-history {
-    grid-template-columns: 1fr;
+  // Container width adjustments
+  .container {
+    max-width: 90%;
   }
 
-  // Fix or divider
+  // Adjust audio player and related elements
+  .audio-player {
+    min-width: 180px;
+  }
+
+  // Control bar adjustments
+  .control-bar {
+    padding: var(--space-3);
+  }
+
+  // Adjust or divider spacing
   .or-divider {
     &::before, &::after {
       width: 35%;
     }
   }
-
-  .control-bar {
-    padding: var(--space-3);
-  }
-
-  .audio-player {
-    min-width: 180px;
-  }
 }
 
-// Desktop screens - horizontal instruction grid
+// Desktop screens (1024px and above)
 @include desktop {
+  // Layout adjustments
   .instruction-grid {
     grid-template-columns: repeat(3, 1fr);
     margin: 0 0 1rem 0;
   }
 
+  // File loader with history layout
   .file-loader-with-history {
     grid-template-columns: 3fr 2fr;
   }
@@ -256,15 +180,8 @@
       width: 40%;
     }
   }
-}
 
-// Extra large screens
-@include large-desktop {
-  .container {
-    max-width: var(--container-width);
-    margin: 0 auto 1rem;
-  }
-
+  // Content width adjustments
   .reader-container {
     max-width: 900px;
     margin-left: auto;
@@ -272,27 +189,60 @@
   }
 }
 
+// Extra large screens
+@include large-desktop {
+  .container {
+    max-width: var(--container-width);
+  }
+}
+
 // Print styles
 @media print {
+  // Hide interactive elements
+  button,
+  .button,
   .control-bar,
   .keyboard-help,
-  .keyboard-toggle {
+  .keyboard-toggle,
+  nav,
+  .nav-container {
     display: none !important;
   }
 
-  .reader-container {
-    box-shadow: none;
+  // Optimize for print
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: black;
+    background: white;
+  }
+
+  a {
+    text-decoration: underline;
+    color: black;
+  }
+
+  // Adjust card and container styles
+  .card, .container, .reader-container {
     border: 1px solid #ccc;
-    padding: 1cm;
+    box-shadow: none;
+    background: white;
   }
 
-  .blank, .revealed {
-    border: 1px solid black;
-    print-color-adjust: exact;
+  // Page breaks
+  h1, h2, h3 {
+    page-break-after: avoid;
+    page-break-inside: avoid;
   }
 
-  // Force page breaks between pages
-  .reader-wrapper + .reader-wrapper {
+  img {
+    page-break-inside: avoid;
+    max-width: 100% !important;
+  }
+
+  // Force page breaks where needed
+  .reader-wrapper + .reader-wrapper,
+  .page-break {
     page-break-before: always;
   }
 }
@@ -306,7 +256,12 @@
     scroll-behavior: auto !important;
   }
 
-  .blank:hover, .card:hover, .file-card:hover {
+  // Disable hover animations and transforms
+  .button:hover,
+  .card:hover,
+  .file-card:hover,
+  .blank:hover {
     transform: none !important;
+    transition: none !important;
   }
 }
